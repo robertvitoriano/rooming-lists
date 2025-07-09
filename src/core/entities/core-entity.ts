@@ -1,18 +1,17 @@
-import { randomUUID } from 'crypto';
 import { UniqueId } from './value-objects/unique-id';
 
-interface OptionalProps {
+export type OptionalProps = Partial<{
   id: string;
   createdAt: Date;
   updatedAt: Date;
-}
+}>;
 export class CoreEntity<T> {
   private _id: UniqueId;
   private _createdAt: Date;
   private _updatedAt: Date;
 
   protected props: T;
-  protected constructor(props: T, optional: Partial<OptionalProps> = {}) {
+  protected constructor(props: T, optional: OptionalProps = {}) {
     const { id, createdAt, updatedAt } = optional;
     this.props = props;
     this._id = new UniqueId(id);

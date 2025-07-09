@@ -55,11 +55,11 @@ export class CreateEventsAndRoomingListsUseCase {
       } = eventRoomingList;
 
       const roomListNotCreated = !existingRoomLists.find(
-        (item) => String(item.id.toValue()) === String(roomingListId),
+        (item) => item.id.toValue() === String(roomingListId),
       );
 
       const eventNotCreated = !existingEvents.find(
-        (item) => String(item.id.toValue()) === String(eventId),
+        (item) => item.id.toValue() === String(eventId),
       );
 
       if (eventNotCreated) {

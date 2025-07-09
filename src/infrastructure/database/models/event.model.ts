@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { RoomingListModel } from './rooming-list.model';
-@Entity()
+@Entity({name:"events"})
 export class EventModel {
   @PrimaryColumn()
   id: string;

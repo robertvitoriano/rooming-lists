@@ -1,4 +1,5 @@
-import { Column, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
+@Entity({name:"rooming_list_bookings"})
 
 export class RoomingListBookingModel {
   @PrimaryColumn()

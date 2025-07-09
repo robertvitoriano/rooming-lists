@@ -3,7 +3,7 @@ import { IRoomingListStatus } from 'src/core/entities/value-objects/rooming-list
 import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { EventModel } from './event.model';
 
-@Entity()
+@Entity({name:"rooming_lists"})
 export class RoomingListModel {
   @PrimaryColumn()
   id: string;

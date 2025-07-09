@@ -1,12 +1,13 @@
 import { IRoomingListAgreementType } from 'src/core/entities/value-objects/rooming-list-agreement-type';
 import { IRoomingListStatus } from 'src/core/entities/value-objects/rooming-list-status';
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { EventModel } from './event.model';
 
 @Entity()
 export class RoomingListModel {
   @PrimaryColumn()
   id: string;
-  
+
   @Column({ name: 'event_id' })
   eventId: string;
 
@@ -30,4 +31,8 @@ export class RoomingListModel {
 
   @Column({ name: 'updated_at', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
+
+  @ManyToOne(() => EventModel, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'event_id' })
+  event: EventModel;
 }

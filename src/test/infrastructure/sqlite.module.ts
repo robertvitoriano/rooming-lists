@@ -5,7 +5,6 @@ import { EventModel } from 'src/infrastructure/database/models/event.model';
 import { RoomingListBookingModel } from 'src/infrastructure/database/models/rooming-list-bookings.model';
 import { RoomingListModel } from 'src/infrastructure/database/models/rooming-list.model';
 
-
 @Module({
   imports: [
     TypeOrmModule.forRoot({

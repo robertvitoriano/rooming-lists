@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { FetchRoomingListsUseCase } from 'src/core/use-cases/fetch-rooming-lists';
 
-@Controller('rooming-lists')
+@Controller('/rooming-lists')
 export class RoomingListsController {
   constructor(
     private readonly fetchRoomingListsUseCase: FetchRoomingListsUseCase,

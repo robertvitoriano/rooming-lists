@@ -24,7 +24,6 @@ import { BookingModel } from '../models/booking.model';
           EventModel,
           RoomingListBookingModel,
         ],
-        migrations: ['src/infrastructure/database/migrations/*.ts'],
         synchronize: false,
       }),
     }),

@@ -6,10 +6,33 @@ export class RoomingListsController {
   constructor(
     private readonly fetchRoomingListsUseCase: FetchRoomingListsUseCase,
   ) {}
-  
-  @Get("/")
+
+  @Get('/')
   async fetchRoomingLists() {
-    await this.fetchRoomingListsUseCase.execute({});
+    const { roomingLists } = await this.fetchRoomingListsUseCase.execute({});
+    return roomingLists.map(
+      ({
+        agreementType,
+        createdAt,
+        cutOffDate,
+        eventId,
+        hotelId,
+        id,
+        rfpName,
+        status,
+        updatedAt,
+      }) => ({
+        id:id.toValue(),
+        agreementType,
+        createdAt,
+        cutOffDate,
+        eventId,
+        hotelId,
+        rfpName,
+        status,
+        updatedAt,
+      }),
+    );
   }
   // async fetchRoomingListsByEvents() {
   //   await this.fetchRoomingListsUseCase.execute();

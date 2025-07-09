@@ -10,7 +10,7 @@ export class CreateEventsTable1752084255034 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'int',
+            type: 'varchar',
             isPrimary: true,
           },
           {

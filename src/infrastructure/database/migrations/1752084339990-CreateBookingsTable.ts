@@ -17,6 +17,7 @@ export class CreateBookingsTable1752084339990 implements MigrationInterface {
             name: 'guest_name',
             type: 'varchar',
           },
+          
           {
             name: 'guest_phone_number',
             type: 'varchar',

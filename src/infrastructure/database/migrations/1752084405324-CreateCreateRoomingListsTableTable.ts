@@ -22,7 +22,7 @@ export class CreateCreateRoomingListsTableTable1752084405324
           },
           {
             name: 'event_id',
-            type: 'int',
+            type: 'varchar',
             isNullable: false,
           },
           {

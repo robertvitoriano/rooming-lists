@@ -8,13 +8,13 @@ export class SeedEventsAndRoomingLists {
     @Inject(CreateEventsAndRoomingListsUseCase)
     private readonly createRoomingListsAndEventsUseCase: CreateEventsAndRoomingListsUseCase,
   ) {}
-  handle() {
+  async handle() {
     const rawData = JSON.parse(
       readFileSync(
         resolve(__dirname, '..', '..', '..', 'data', 'rooming-lists.json'),
         'utf-8',
       ),
     );
-    this.createRoomingListsAndEventsUseCase.execute({eventRoomingLists:rawData})
+    await this.createRoomingListsAndEventsUseCase.execute({eventRoomingLists:rawData})
   }
 }

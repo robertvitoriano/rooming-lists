@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { ListRoomingListsUseCase } from 'src/core/use-cases/list-rooming-lists-use-case';
+import { FetchRoomingListsUseCase } from 'src/core/use-cases/fetch-rooming-lists';
 
 @Injectable()
 export class RoomingListService  {
   constructor(
-    private readonly listRoomingListsUseCase: ListRoomingListsUseCase,
+    private readonly listRoomingListsUseCase: FetchRoomingListsUseCase,
   ) {
   }
 

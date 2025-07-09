@@ -1,11 +1,11 @@
 import { IRoomingListsRepository } from '../repositories/IRoomingListsRepository';
 import { FetchRoomingListsUseCase } from './fetch-rooming-lists';
 import { RoomingList } from '../entities/rooming-list';
-import { SqliteModule } from 'src/test/infrastructure/sqlite/sqlite.module';
-import { SqliteRoomingListRepository } from 'src/test/infrastructure/sqlite/repositories/sqlite-booking-lists-repository.ts';
 import { RoomingListModel } from 'src/infrastructure/database/models/rooming-list.model';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
+import { SqliteModule } from 'src/test/infrastructure/sqlite.module';
+import { RoomingListsRepository } from 'src/infrastructure/database/repositories/booking-lists-repository';
 
 describe('FetchRoomingListsUseCase', () => {
   let roomingListsRepository: IRoomingListsRepository;
@@ -15,10 +15,9 @@ describe('FetchRoomingListsUseCase', () => {
     const app: TestingModule = await Test.createTestingModule({
       imports: [SqliteModule, TypeOrmModule.forFeature([RoomingListModel])],
       providers: [
-        FetchRoomingListsUseCase,
         {
           provide: 'IRoomingListsRepository',
-          useClass: SqliteRoomingListRepository,
+          useClass: RoomingListsRepository,
         },
         {
           inject: ['IRoomingListsRepository'],

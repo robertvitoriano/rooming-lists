@@ -5,7 +5,6 @@ interface FetchRoomingListsRequest {}
 interface FetchRoomingListsResponse {
   roomingLists: RoomingList[];
 }
-@Injectable()
 export class FetchRoomingListsUseCase {
   constructor(
     private readonly roominglistRepository: IRoomingListsRepository,

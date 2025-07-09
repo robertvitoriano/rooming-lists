@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BookingModel } from '../../../infrastructure/database/models/booking.model';
-import { RoomingListModel } from '../../../infrastructure/database/models/rooming-list.model';
-import { EventModel } from '../../../infrastructure/database/models/event.model';
-import { RoomingListBookingModel } from '../../../infrastructure/database/models/rooming-list-bookings.model';
+import { BookingModel } from 'src/infrastructure/database/models/booking.model';
+import { EventModel } from 'src/infrastructure/database/models/event.model';
+import { RoomingListBookingModel } from 'src/infrastructure/database/models/rooming-list-bookings.model';
+import { RoomingListModel } from 'src/infrastructure/database/models/rooming-list.model';
+
 
 @Module({
   imports: [

@@ -1,14 +1,20 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { RoomingListModel } from '../../../../infrastructure/database/models/rooming-list.model';
-import { IRoomingListsRepository } from 'src/core/repositories/IRoomingListsRepository';
+import { RoomingListModel } from '../models/rooming-list.model';
+import { EventWithRoomingLists, IRoomingListsRepository } from 'src/core/repositories/IRoomingListsRepository';
 import { RoomingList } from 'src/core/entities/rooming-list';
 
-export class SqliteRoomingListRepository implements IRoomingListsRepository {
+export class RoomingListsRepository implements IRoomingListsRepository {
   constructor(
     @InjectRepository(RoomingListModel)
-    private readonly roomingListsRepository: Repository<RoomingListModel>,
+    private roomingListsRepository: Repository<RoomingListModel>,
   ) {}
+  listByEvents(): Promise<EventWithRoomingLists[]> {
+    throw new Error('Method not implemented.');
+  }
+  findByEvent(): Promise<EventWithRoomingLists> {
+    throw new Error('Method not implemented.');
+  }
   async list(): Promise<RoomingList[]> {
     const result = await this.roomingListsRepository.find();
 
@@ -35,16 +41,16 @@ export class SqliteRoomingListRepository implements IRoomingListsRepository {
     hotelId,
     rfpName,
     status,
-    id,
+    id
   }: RoomingList) {
     const roomingListRecord = this.roomingListsRepository.create({
+      id: id.toValue(),
       agreementType,
       cutOffDate,
       eventId,
       hotelId,
       rfpName,
       status,
-      id: id.toValue(),
     });
     await this.roomingListsRepository.save(roomingListRecord);
   }

@@ -9,16 +9,12 @@ export class SeedEventsAndRoomingLists {
     private readonly createRoomingListsAndEventsUseCase: CreateEventsAndRoomingListsUseCase,
   ) {}
   handle() {
-    if (this.createRoomingListsAndEventsUseCase) {
-      console.log('DEPENDENCY INJECTION WORKED');
-    } else {
-      console.log('DEPENDENCY INJECTION DID NOT WORK');
-    }
     const rawData = JSON.parse(
       readFileSync(
         resolve(__dirname, '..', '..', '..', 'data', 'rooming-lists.json'),
         'utf-8',
       ),
     );
+    this.createRoomingListsAndEventsUseCase.execute({eventRoomingLists:rawData})
   }
 }

@@ -4,6 +4,9 @@ import { Entity, Column, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class RoomingListModel {
+  @PrimaryColumn()
+  id: string;
+  
   @Column({ name: 'event_id' })
   eventId: string;
 
@@ -21,7 +24,7 @@ export class RoomingListModel {
 
   @Column({ name: 'agreement_type' })
   agreementType: IRoomingListAgreementType;
-  
+
   @Column({ name: 'created_at', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 

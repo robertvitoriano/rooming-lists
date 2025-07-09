@@ -31,9 +31,8 @@ describe('FetchRoomingListsUseCase', () => {
     }).compile();
 
     sut = app.get<FetchRoomingListsUseCase>(FetchRoomingListsUseCase);
-    roomingListsRepository = app.get<IRoomingListsRepository>(
-      'IRoomingListsRepository',
-    );
+    roomingListsRepository = app.get<IRoomingListsRepository>('IRoomingListsRepository');
+
   });
 
   it('Should be able to list created RoomingLists', async () => {

@@ -9,7 +9,7 @@ import { RoomingListBookingModel } from '../../../infrastructure/database/models
   imports: [
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      database: 'data/test.sqlite',
+      database: ':memory:',
       entities: [
         BookingModel,
         RoomingListModel,

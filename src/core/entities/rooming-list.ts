@@ -6,15 +6,12 @@ interface RoomingListProps {
   eventId: string;
   hotelId: string;
   rfpName: string;
-  cut0ffDate: Date;
+  cutOffDate: Date;
   status: IRoomingListStatus;
   agreementType: IRoomingListAgreementType;
 }
 
 export class RoomingList extends CoreEntity<RoomingListProps> {
-  static create(props: RoomingListProps, id?: string) {
-    return new RoomingList(props, { id });
-  }
 
   get eventId() {
     return this.props.eventId;
@@ -29,7 +26,7 @@ export class RoomingList extends CoreEntity<RoomingListProps> {
   }
 
   get cutOffDate() {
-    return this.props.cut0ffDate;
+    return this.props.cutOffDate;
   }
 
   get status() {

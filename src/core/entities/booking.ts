@@ -7,10 +7,7 @@ interface BookingProps {
   checkOutDate: Date;
 }
 export class Booking extends CoreEntity<BookingProps> {
-  static create(props: BookingProps) {
-    return new Booking(props);
-  }
-  
+
   get guestName() {
     return this.props.guestName;
   }

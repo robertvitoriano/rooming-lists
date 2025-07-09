@@ -1,33 +1,55 @@
 import { IRoomingListsRepository } from '../repositories/IRoomingListsRepository';
 import { FetchRoomingListsUseCase } from './fetch-rooming-lists';
 import { RoomingList } from '../entities/rooming-list';
-import { InMemoryRoomingListsRepository } from '../../test/repositories/in-memory-rooming-lists-repository';
+import { SqliteModule } from 'src/test/infrastructure/sqlite/sqlite.module';
+import { SqliteRoomingListRepository } from 'src/test/infrastructure/sqlite/repositories/sqlite-booking-lists-repository.ts';
+import { RoomingListModel } from 'src/infrastructure/database/models/rooming-list.model';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Test, TestingModule } from '@nestjs/testing';
 
 describe('FetchRoomingListsUseCase', () => {
   let roomingListsRepository: IRoomingListsRepository;
   let sut: FetchRoomingListsUseCase;
-  
-  beforeEach(() => {
-    roomingListsRepository = new InMemoryRoomingListsRepository();
-    sut = new FetchRoomingListsUseCase(roomingListsRepository);
+
+  beforeEach(async () => {
+    const app: TestingModule = await Test.createTestingModule({
+      imports: [SqliteModule, TypeOrmModule.forFeature([RoomingListModel])],
+      providers: [
+        FetchRoomingListsUseCase,
+        {
+          provide: 'IRoomingListsRepository',
+          useClass: SqliteRoomingListRepository,
+        },
+        {
+          inject: ['IRoomingListsRepository'],
+          provide: FetchRoomingListsUseCase,
+          useFactory: (roomingListsRepository: IRoomingListsRepository) => {
+            return new FetchRoomingListsUseCase(roomingListsRepository);
+          },
+        },
+      ],
+    }).compile();
+
+    sut = app.get<FetchRoomingListsUseCase>(FetchRoomingListsUseCase);
+    roomingListsRepository = app.get<IRoomingListsRepository>(
+      'IRoomingListsRepository',
+    );
   });
-  
+
   it('Should be able to list created RoomingLists', async () => {
-    const roomingList = RoomingList.create({
+    const roomingList = new RoomingList({
       agreementType: 'artist',
-      cut0ffDate: new Date(),
+      cutOffDate: new Date(),
       eventId: '1',
       hotelId: '1',
       rfpName: 'ASDSA',
       status: 'active',
     });
-     
-    await roomingListsRepository.create(roomingList)
-    
-    const {roomingLists} = await sut.execute({})
-    
-    expect(roomingLists.length).toBe(1)
-  
-    
+
+    await roomingListsRepository.create(roomingList);
+
+    const { roomingLists } = await sut.execute({});
+
+    expect(roomingLists.length).toBe(1);
   });
 });

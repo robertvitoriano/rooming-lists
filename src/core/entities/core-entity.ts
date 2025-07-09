@@ -11,12 +11,13 @@ export class CoreEntity<T> {
   private _updatedAt: Date;
 
   protected props: T;
-  protected constructor(props: T, optional: OptionalProps = {}) {
+  constructor(props: T, optional: OptionalProps = {}) {
     const { id, createdAt, updatedAt } = optional;
     this.props = props;
     this._id = new UniqueId(id);
     this._createdAt = createdAt ?? new Date();
     this._updatedAt = updatedAt ?? new Date();
+  
   }
   get id() {
     return this._id;

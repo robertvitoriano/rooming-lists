@@ -1,13 +1,13 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { RoomingListModel } from '../../models/rooming-list.model';
+import { RoomingListModel } from '../../../../infrastructure/database/models/rooming-list.model';
 import { IRoomingListsRepository } from 'src/core/repositories/IRoomingListsRepository';
 import { RoomingList } from 'src/core/entities/rooming-list';
 
-export class PostgresRoomingListsRepository implements IRoomingListsRepository {
+export class SqliteRoomingListRepository implements IRoomingListsRepository {
   constructor(
     @InjectRepository(RoomingListModel)
-    private roomingListsRepository: Repository<RoomingListModel>,
+    private readonly roomingListsRepository: Repository<RoomingListModel>,
   ) {}
   async list(): Promise<RoomingList[]> {
     const result = await this.roomingListsRepository.find();
@@ -35,16 +35,16 @@ export class PostgresRoomingListsRepository implements IRoomingListsRepository {
     hotelId,
     rfpName,
     status,
-    id
+    id,
   }: RoomingList) {
     const roomingListRecord = this.roomingListsRepository.create({
-      id: id.toValue(),
       agreementType,
       cutOffDate,
       eventId,
       hotelId,
       rfpName,
       status,
+      id: id.toValue(),
     });
     await this.roomingListsRepository.save(roomingListRecord);
   }

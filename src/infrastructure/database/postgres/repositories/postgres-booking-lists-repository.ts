@@ -9,17 +9,45 @@ export class PostgresRoomingListsRepository implements IRoomingListsRepository {
     @InjectRepository(RoomingListModel)
     private roomingListsRepository: Repository<RoomingListModel>,
   ) {}
-  list(): Promise<RoomingList[]> {
-    throw new Error('Method not implemented.');
+  async list(): Promise<RoomingList[]> {
+    const result = await this.roomingListsRepository.find();
+
+    const rommingLists: RoomingList[] = result.map(
+      ({ eventId, hotelId, rfpName, status, cut0ffDate, agreementType, id }) =>
+        RoomingList.create(
+          {
+            eventId,
+            hotelId,
+            rfpName,
+            status,
+            cut0ffDate,
+            agreementType,
+          },
+          id,
+        ),
+    );
+    return rommingLists;
   }
-  async create(roominglist: RoomingList) {
-    // await this.roomingListsRepository.save({
-    //   id: roominglist.id,
-    //   name: roominglist.name,
-    //   url: roominglist.url,
-    //   createdAt: roominglist.createdAt,
-    //   updatedAt: roominglist.updatedAt,
-    // });
+  async create({
+    agreementType,
+    cutOffDate,
+    eventId,
+    hotelId,
+    rfpName,
+    status,
+    createdAt,
+    updatedAt,
+  }: RoomingList) {
+    await this.roomingListsRepository.save({
+      agreementType,
+      cutOffDate,
+      eventId,
+      hotelId,
+      rfpName,
+      status,
+      createdAt,
+      updatedAt,
+    });
   }
   async delete() {
     throw new Error('Method not implemented.');

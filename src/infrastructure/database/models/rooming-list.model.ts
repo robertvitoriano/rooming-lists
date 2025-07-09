@@ -17,7 +17,7 @@ export class RoomingListModel {
   rfpName: string;
 
   @Column({ name: 'cut_off_date' })
-  cut0ffDate: string;
+  cut0ffDate: Date;
 
   @Column({ name: 'status' })
   status: IRoomingListStatus;

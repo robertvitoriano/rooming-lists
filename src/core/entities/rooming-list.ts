@@ -12,8 +12,8 @@ interface RoomingListProps {
 }
 
 export class RoomingList extends CoreEntity<RoomingListProps> {
-  static create(props: RoomingListProps) {
-    return new RoomingList(props);
+  static create(props: RoomingListProps, id?: string) {
+    return new RoomingList(props, { id });
   }
 
   get eventId() {

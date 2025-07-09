@@ -6,7 +6,7 @@ import { RoomingListModel } from 'src/infrastructure/database/models/rooming-lis
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
 import { SqliteModule } from 'src/test/infrastructure/sqlite.module';
-import { RoomingListsRepository } from 'src/infrastructure/database/repositories/booking-lists-repository';
+import { RoomingListsRepository } from 'src/infrastructure/database/repositories/rooming-lists-repository';
 import { EventsRepository } from 'src/infrastructure/database/repositories/events-repository';
 import { IEventsRepository } from '../repositories/IEventsRepository';
 import { EventModel } from 'src/infrastructure/database/models/event.model';

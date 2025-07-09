@@ -1,7 +1,10 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { RoomingListModel } from '../models/rooming-list.model';
-import { EventWithRoomingLists, IRoomingListsRepository } from 'src/core/repositories/IRoomingListsRepository';
+import {
+  EventWithRoomingLists,
+  IRoomingListsRepository,
+} from 'src/core/repositories/IRoomingListsRepository';
 import { RoomingList } from 'src/core/entities/rooming-list';
 
 export class RoomingListsRepository implements IRoomingListsRepository {
@@ -41,7 +44,7 @@ export class RoomingListsRepository implements IRoomingListsRepository {
     hotelId,
     rfpName,
     status,
-    id
+    id,
   }: RoomingList) {
     const roomingListRecord = this.roomingListsRepository.create({
       id: id.toValue(),
@@ -53,6 +56,40 @@ export class RoomingListsRepository implements IRoomingListsRepository {
       status,
     });
     await this.roomingListsRepository.save(roomingListRecord);
+  }
+
+  async findManyById(ids: string[]): Promise<RoomingList[]> {
+    const result = await this.roomingListsRepository.find({
+      where: {
+        id: In(ids),
+      },
+    });
+
+    const events: RoomingList[] = result.map(
+      ({
+        id,
+        agreementType,
+        createdAt,
+        cutOffDate,
+        eventId,
+        hotelId,
+        rfpName,
+        status,
+        updatedAt,
+      }) =>
+        new RoomingList(
+          {
+            agreementType,
+            cutOffDate,
+            eventId,
+            hotelId,
+            rfpName,
+            status,
+          },
+          { id, createdAt, updatedAt },
+        ),
+    );
+    return events;
   }
   async delete() {
     throw new Error('Method not implemented.');

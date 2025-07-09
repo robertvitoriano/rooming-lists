@@ -1,10 +1,11 @@
+import { writeFileSync } from 'fs';
 import { Event } from '../entities/event';
 import { RoomingList } from '../entities/rooming-list';
 import { IRoomingListAgreementType } from '../entities/value-objects/rooming-list-agreement-type';
 import { IRoomingListStatus } from '../entities/value-objects/rooming-list-status';
 import { IEventsRepository } from '../repositories/IEventsRepository';
 import { IRoomingListsRepository } from '../repositories/IRoomingListsRepository';
-interface EventRoomingListData {
+export interface EventRoomingListData {
   roomingListId: number;
   eventId: number;
   eventName: string;
@@ -25,6 +26,22 @@ export class CreateEventsAndRoomingListsUseCase {
   async execute({
     eventRoomingLists,
   }: CreateEventsAndRoomingListsRequest): Promise<void> {
+    const providedEventIds = new Set<string>();
+    const providedRoomingListIds = new Set<string>();
+
+    eventRoomingLists.forEach(({ eventId, roomingListId }) => {
+      providedEventIds.add(String(eventId));
+      providedRoomingListIds.add(String(roomingListId));
+    });
+
+    const existingEvents = await this.eventsRepository.findManyById(
+      Array.from(providedEventIds),
+    );
+
+    const existingRoomLists = await this.roomingListsRepository.findManyById(
+      Array.from(providedRoomingListIds),
+    );
+
     for (const eventRoomingList of eventRoomingLists) {
       const {
         agreementType,
@@ -36,29 +53,42 @@ export class CreateEventsAndRoomingListsUseCase {
         roomingListId,
         status,
       } = eventRoomingList;
-      const event = new Event(
-        {
-          name: eventName,
-        },
-        { id: String(eventId) },
-      );
-      await this.eventsRepository.create(event);
 
-      const roomingList = new RoomingList(
-        {
-          agreementType,
-          cutOffDate: new Date(cutOffDate),
-          eventId: String(event.id),
-          hotelId: String(hotelId),
-          rfpName,
-          status,
-        },
-        {
-          id: String(roomingListId),
-        },
+      const roomListNotCreated = !existingRoomLists.find(
+        (item) => String(item.id.toValue()) === String(roomingListId),
       );
 
-      await this.roomingListsRepository.create(roomingList);
+      const eventNotCreated = !existingEvents.find(
+        (item) => String(item.id.toValue()) === String(eventId),
+      );
+
+      if (eventNotCreated) {
+        const event = new Event(
+          {
+            name: eventName,
+          },
+          { id: String(eventId) },
+        );
+        await this.eventsRepository.create(event);
+      }
+
+      if (roomListNotCreated) {
+        const roomingList = new RoomingList(
+          {
+            agreementType,
+            cutOffDate: new Date(cutOffDate),
+            eventId: String(eventId),
+            hotelId: String(hotelId),
+            rfpName,
+            status,
+          },
+          {
+            id: String(roomingListId),
+          },
+        );
+
+        await this.roomingListsRepository.create(roomingList);
+      }
     }
   }
 }

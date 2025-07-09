@@ -1,7 +1,10 @@
 import { Inject } from '@nestjs/common';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { CreateEventsAndRoomingListsUseCase } from 'src/core/use-cases/create-events-and-rooming-lists';
+import {
+  CreateEventsAndRoomingListsUseCase,
+  EventRoomingListData,
+} from 'src/core/use-cases/create-events-and-rooming-lists';
 
 export class SeedEventsAndRoomingLists {
   constructor(
@@ -15,6 +18,14 @@ export class SeedEventsAndRoomingLists {
         'utf-8',
       ),
     );
-    await this.createRoomingListsAndEventsUseCase.execute({eventRoomingLists:rawData})
+    const eventRoomingLists: EventRoomingListData[] = rawData.map(
+      ({ agreement_type, ...rest }) => ({
+        agreementType: agreement_type,
+        ...rest,
+      }),
+    );
+    await this.createRoomingListsAndEventsUseCase.execute({
+      eventRoomingLists,
+    });
   }
 }

@@ -9,6 +9,7 @@ export interface IRoomingListsRepository {
   list():Promise<RoomingList[]>
   listByEvents():Promise<EventWithRoomingLists[]>
   findByEvent():Promise<EventWithRoomingLists>
+  findManyById(ids: string[]):Promise<RoomingList[]>
   delete():Promise<void>;
   update():Promise<void>;
 }

@@ -5,6 +5,7 @@ export interface EventWithEvents{
 }
 
 export interface IEventsRepository {
-  create(roomingLit: Event):Promise<void>;
+  create(event: Event):Promise<void>;
+  findManyById(ids:string[]):Promise<Event[]>
   list():Promise<Event[]>
 }

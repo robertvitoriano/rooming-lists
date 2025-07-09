@@ -1,5 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 import { EventModel } from '../models/event.model';
 import { Event } from 'src/core/entities/event';
@@ -12,6 +12,19 @@ export class EventsRepository implements IEventsRepository {
 
   async list(): Promise<Event[]> {
     const result = await this.eventsRepository.find();
+
+    const events: Event[] = result.map(
+      ({ id, name }) => new Event({ name }, { id }),
+    );
+    return events;
+  }
+
+  async findManyById(ids: string[]): Promise<Event[]> {
+    const result = await this.eventsRepository.find({
+      where: {
+        id: In(ids),
+      },
+    });
 
     const events: Event[] = result.map(
       ({ id, name }) => new Event({ name }, { id }),

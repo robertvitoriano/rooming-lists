@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RoomingListModel } from '../models/rooming-list.model';
 import { EventModel } from '../models/event.model';
-import { RoomingListModelBookingModel } from '../models/rooming-list-bookings.model';
+import { RoomingListBookingModel } from '../models/rooming-list-bookings.model';
 import { BookingModel } from '../models/booking.model';
 
 @Module({
@@ -22,7 +22,7 @@ import { BookingModel } from '../models/booking.model';
           BookingModel,
           RoomingListModel,
           EventModel,
-          RoomingListModelBookingModel,
+          RoomingListBookingModel,
         ],
         synchronize: configService.get<string>('ENVIRONEMNT') === 'DEV',
       }),

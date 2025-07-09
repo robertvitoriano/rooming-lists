@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { BookingModel } from '../models/booking.model';
 import { RoomingListModel } from '../models/rooming-list.model';
 import { EventModel } from '../models/event.model';
-import { RoomingListModelBookingModel } from '../models/rooming-list-bookings.model';
+import { RoomingListBookingModel } from '../models/rooming-list-bookings.model';
 
 @Module({
   imports: [
@@ -14,7 +14,7 @@ import { RoomingListModelBookingModel } from '../models/rooming-list-bookings.mo
         BookingModel,
         RoomingListModel,
         EventModel,
-        RoomingListModelBookingModel,
+        RoomingListBookingModel,
       ],
       synchronize: true,
     }),

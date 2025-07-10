@@ -74,8 +74,11 @@ export class BookingsRepository implements IBookingsRepository {
     });
 
     if (!result) return null;
-
+    
     const { booking, roomingList } = result;
+    
+    if (!booking || !roomingList) return null;
+
     const {
       id: foundRoomingListId,
       agreementType,

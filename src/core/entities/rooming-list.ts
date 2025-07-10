@@ -1,4 +1,4 @@
-import { CoreEntity } from './core-entity';
+import { CoreEntity, OptionalProps } from './core-entity';
 import { IRoomingListAgreementType } from './value-objects/rooming-list-agreement-type';
 import { IRoomingListStatus } from './value-objects/rooming-list-status';
 
@@ -10,8 +10,21 @@ interface RoomingListProps {
   status: IRoomingListStatus;
   agreementType: IRoomingListAgreementType;
 }
+interface RoomingListMetadata {
+  bookingsCount: number;
+}
 
 export class RoomingList extends CoreEntity<RoomingListProps> {
+  private readonly metadata?: RoomingListMetadata;
+
+  constructor(
+    props: RoomingListProps,
+    optional?: OptionalProps,
+    metadata?: RoomingListMetadata,
+  ) {
+    super(props, optional);
+    this.metadata = metadata;
+  }
 
   get eventId() {
     return this.props.eventId;
@@ -35,5 +48,8 @@ export class RoomingList extends CoreEntity<RoomingListProps> {
 
   get agreementType() {
     return this.props.agreementType;
+  }
+  get bookingsCount(): number {
+    return this.metadata?.bookingsCount ?? 0;
   }
 }

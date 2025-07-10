@@ -32,6 +32,7 @@ export class EventsRepository implements IEventsRepository {
           rfpName,
           status,
           createdAt,
+          roomingListBookings,
         }) =>
           new RoomingList(
             {
@@ -43,6 +44,7 @@ export class EventsRepository implements IEventsRepository {
               status,
             },
             { id, createdAt },
+            { bookingsCount: roomingListBookings.length },
           ),
       ),
     }));

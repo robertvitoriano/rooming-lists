@@ -6,6 +6,7 @@ import {
   createEventsAndRoomingLists,
   eventsRepository,
   fetchRoomingLists,
+  fetchRoomingListsByEvent,
   roomingListsRepository,
 } from './providers';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -31,6 +32,7 @@ import { SeedEventsAndRoomingLists } from 'src/infrastructure/database/seeders/s
     eventsRepository,
     fetchRoomingLists,
     createEventsAndRoomingLists,
+    fetchRoomingListsByEvent,
     SeedEventsAndRoomingLists,
   ],
   controllers: [RoomingListsController],

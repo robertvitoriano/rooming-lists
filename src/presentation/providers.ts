@@ -4,6 +4,7 @@ import { CreateEventsAndRoomingListsUseCase } from 'src/core/use-cases/create-ev
 import { FetchRoomingListsUseCase } from 'src/core/use-cases/fetch-rooming-lists';
 import { RoomingListsRepository } from 'src/infrastructure/database/repositories/rooming-lists-repository';
 import { EventsRepository } from 'src/infrastructure/database/repositories/events-repository';
+import { FetchEventsWithRoomingListsUseCase } from 'src/core/use-cases/fetch-events-with-rooming-lists';
 
 export const roomingListsRepository = {
   provide: 'IRoomingListsRepository',
@@ -22,6 +23,14 @@ export const fetchRoomingLists = {
     return new FetchRoomingListsUseCase(roomingListsRepository);
   },
 };
+
+export const fetchRoomingListsByEvent = {
+  inject:['IEventsRepository'],
+  provide:FetchEventsWithRoomingListsUseCase,
+  useFactory:(eventsRepository)=>{
+    return new FetchEventsWithRoomingListsUseCase(eventsRepository)
+  }
+}
 
 export const createEventsAndRoomingLists = {
   inject: ['IRoomingListsRepository', 'IEventsRepository'],

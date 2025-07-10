@@ -2,7 +2,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { RoomingListModel } from '../models/rooming-list.model';
 import {
-  EventWithRoomingLists,
   IRoomingListsRepository,
 } from 'src/core/repositories/IRoomingListsRepository';
 import { RoomingList } from 'src/core/entities/rooming-list';
@@ -12,10 +11,8 @@ export class RoomingListsRepository implements IRoomingListsRepository {
     @InjectRepository(RoomingListModel)
     private roomingListsRepository: Repository<RoomingListModel>,
   ) {}
-  listByEvents(): Promise<EventWithRoomingLists[]> {
-    throw new Error('Method not implemented.');
-  }
-  findByEvent(): Promise<EventWithRoomingLists> {
+
+  findByEvent(): Promise<void> {
     throw new Error('Method not implemented.');
   }
   async list(): Promise<RoomingList[]> {

@@ -1,14 +1,9 @@
 import { RoomingList } from "../entities/rooming-list";
-
-export interface EventWithRoomingLists{
-  roomingLists:RoomingList[]
-}
+import { UniqueId } from "../entities/value-objects/unique-id";
 
 export interface IRoomingListsRepository {
   create(roomingLit: RoomingList):Promise<void>;
   list():Promise<RoomingList[]>
-  listByEvents():Promise<EventWithRoomingLists[]>
-  findByEvent():Promise<EventWithRoomingLists>
   findManyById(ids: string[]):Promise<RoomingList[]>
   delete():Promise<void>;
   update():Promise<void>;

@@ -1,4 +1,3 @@
-import { Injectable } from '@nestjs/common';
 import { RoomingList } from '../entities/rooming-list';
 import { IRoomingListsRepository } from '../repositories/IRoomingListsRepository';
 interface FetchRoomingListsRequest {}

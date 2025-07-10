@@ -4,14 +4,19 @@ export class CreateRoomingListBookingsTable1752084595167 implements MigrationInt
     name = 'CreateRoomingListBookingsTable1752084595167'
 
 public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
+
     await queryRunner.createTable(
       new Table({
         name: 'rooming_list_bookings',
         columns: [
           {
             name: 'id',
-            type: 'varchar',
+            type: 'uuid',
             isPrimary: true,
+            isGenerated: true,
+            generationStrategy: 'uuid',
+            default: 'uuid_generate_v4()',
           },
           {
             name: 'rooming_list_id',

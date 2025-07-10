@@ -64,9 +64,9 @@ export const createEventsAndRoomingLists = {
 };
 
 export const createBookings = {
-  inject: ['IBookingsRepository'],
+  inject: ['IBookingsRepository', 'IRoomingListsRepository',],
   provide: CreateBookingsUseCase,
-  useFactory: (bookingsRepository: IBookingsRepository) => {
-    return new CreateBookingsUseCase(bookingsRepository);
+  useFactory: (bookingsRepository: IBookingsRepository, roomingListRepository: IRoomingListsRepository) => {
+    return new CreateBookingsUseCase(bookingsRepository, roomingListRepository);
   },
 };

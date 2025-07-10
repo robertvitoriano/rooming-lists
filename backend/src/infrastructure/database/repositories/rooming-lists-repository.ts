@@ -10,6 +10,42 @@ export class RoomingListsRepository implements IRoomingListsRepository {
     private roomingListsRepository: Repository<RoomingListModel>,
   ) {}
 
+  async findById(roomingListId: string): Promise<RoomingList | null> {
+    const result = await this.roomingListsRepository.findOne({
+      where: {
+        id: roomingListId,
+      },
+    });
+    
+    if(!result) return null
+    
+    const {
+      id,
+      agreementType,
+      createdAt,
+      cutOffDate,
+      eventId,
+      hotelId,
+      rfpName,
+      status,
+      updatedAt,
+    } = result;
+
+    const roomingList = new RoomingList(
+      {
+        agreementType,
+        cutOffDate,
+        eventId,
+        hotelId,
+        rfpName,
+        status,
+      },
+      { id, createdAt, updatedAt },
+    );
+
+    return roomingList;
+  }
+
   findByEvent(): Promise<void> {
     throw new Error('Method not implemented.');
   }
@@ -17,15 +53,7 @@ export class RoomingListsRepository implements IRoomingListsRepository {
     const result = await this.roomingListsRepository.find();
 
     const rommingLists: RoomingList[] = result.map(
-      ({
-        eventId,
-        hotelId,
-        rfpName,
-        status,
-        cutOffDate,
-        agreementType,
-        id,
-      }) =>
+      ({ eventId, hotelId, rfpName, status, cutOffDate, agreementType, id }) =>
         new RoomingList(
           {
             eventId,
@@ -68,7 +96,7 @@ export class RoomingListsRepository implements IRoomingListsRepository {
       },
     });
 
-    const events: RoomingList[] = result.map(
+    const roomingLists: RoomingList[] = result.map(
       ({
         id,
         agreementType,
@@ -92,7 +120,7 @@ export class RoomingListsRepository implements IRoomingListsRepository {
           { id, createdAt, updatedAt },
         ),
     );
-    return events;
+    return roomingLists;
   }
   async delete() {
     throw new Error('Method not implemented.');

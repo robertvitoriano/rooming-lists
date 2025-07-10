@@ -1,7 +1,7 @@
 import { Inject } from '@nestjs/common';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { BookingData, CreateBookingsUseCase } from 'src/core/use-cases/create-bookings';
+import { BookingData, BookingRoomingListRelationData, CreateBookingsUseCase } from 'src/core/use-cases/create-bookings';
 import {
   CreateEventsAndRoomingListsUseCase,
   EventRoomingListData,
@@ -36,9 +36,15 @@ export class SeedEventsAndRoomingLists {
         'utf-8',
       ),
     );
-
+    const roomingListBookingRelations: BookingRoomingListRelationData[] = JSON.parse(
+      readFileSync(
+        resolve(__dirname, '..', '..', '..', 'data', 'rooming-list-bookings.json'),
+        'utf-8',
+      ),
+    );
     await this.createBookingsUseCase.execute({
       bookings,
+      roomingListBookingRelations
     });
   }
 }

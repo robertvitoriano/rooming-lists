@@ -1,9 +1,18 @@
 import { IRoomingListAgreementType } from 'src/core/entities/value-objects/rooming-list-agreement-type';
 import { IRoomingListStatus } from 'src/core/entities/value-objects/rooming-list-status';
-import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryColumn,
+  ManyToOne,
+  JoinColumn,
+  OneToMany,
+} from 'typeorm';
 import { EventModel } from './event.model';
+import { BookingModel } from './booking.model';
+import { RoomingListBookingModel } from './rooming-list-bookings.model';
 
-@Entity({name:"rooming_lists"})
+@Entity({ name: 'rooming_lists' })
 export class RoomingListModel {
   @PrimaryColumn()
   id: string;
@@ -35,4 +44,8 @@ export class RoomingListModel {
   @ManyToOne(() => EventModel, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'event_id' })
   event: EventModel;
+  
+  @OneToMany(() => RoomingListBookingModel, rlb => rlb.roomingList)
+  roomingListBookings: RoomingListBookingModel[];
+
 }

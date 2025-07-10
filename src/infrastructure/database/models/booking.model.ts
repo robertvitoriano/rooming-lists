@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToOne, PrimaryColumn } from 'typeorm';
+import { RoomingListBookingModel } from './rooming-list-bookings.model';
 @Entity({name:"bookings"})
 
 export class BookingModel {
@@ -22,4 +23,7 @@ export class BookingModel {
   
   @Column({ name: 'updated_at', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
+  
+  @OneToOne(() => RoomingListBookingModel, rlb => rlb.booking)
+  roomingListBooking: RoomingListBookingModel;
 }

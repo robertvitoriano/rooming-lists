@@ -54,6 +54,7 @@ export class RoomingListsController {
           rfpName,
           status,
           updatedAt,
+          bookingsCount
         }) => ({
           id: roomingListId.toValue(),
           agreementType,
@@ -64,6 +65,7 @@ export class RoomingListsController {
           rfpName,
           status,
           updatedAt,
+          bookingsCount
         }),
       ),
     }));

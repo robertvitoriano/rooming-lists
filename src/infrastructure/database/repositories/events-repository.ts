@@ -44,7 +44,7 @@ export class EventsRepository implements IEventsRepository {
               status,
             },
             { id, createdAt },
-            { bookingsCount: roomingListBookings.length },
+            { bookingsCount: roomingListBookings?.length },
           ),
       ),
     }));

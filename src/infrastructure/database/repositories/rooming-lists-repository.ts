@@ -1,9 +1,7 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { RoomingListModel } from '../models/rooming-list.model';
-import {
-  IRoomingListsRepository,
-} from 'src/core/repositories/IRoomingListsRepository';
+import { IRoomingListsRepository } from 'src/core/repositories/IRoomingListsRepository';
 import { RoomingList } from 'src/core/entities/rooming-list';
 
 export class RoomingListsRepository implements IRoomingListsRepository {
@@ -19,7 +17,15 @@ export class RoomingListsRepository implements IRoomingListsRepository {
     const result = await this.roomingListsRepository.find();
 
     const rommingLists: RoomingList[] = result.map(
-      ({ eventId, hotelId, rfpName, status, cutOffDate, agreementType, id }) =>
+      ({
+        eventId,
+        hotelId,
+        rfpName,
+        status,
+        cutOffDate,
+        agreementType,
+        id,
+      }) =>
         new RoomingList(
           {
             eventId,

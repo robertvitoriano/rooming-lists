@@ -1,4 +1,3 @@
-import { writeFileSync } from 'fs';
 import { Event } from '../entities/event';
 import { RoomingList } from '../entities/rooming-list';
 import { IRoomingListAgreementType } from '../entities/value-objects/rooming-list-agreement-type';

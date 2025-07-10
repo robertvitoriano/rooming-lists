@@ -3,6 +3,8 @@ import { ConfigModule } from '@nestjs/config';
 import { RoomingListModel } from '../infrastructure/database/models/rooming-list.model';
 import { PostgresModule } from '../infrastructure/database/postgres/postgres.module';
 import {
+  bookingsRepository,
+  createBookings,
   createEventsAndRoomingLists,
   eventsRepository,
   fetchRoomingLists,
@@ -30,9 +32,11 @@ import { SeedEventsAndRoomingLists } from 'src/infrastructure/database/seeders/s
   providers: [
     roomingListsRepository,
     eventsRepository,
+    bookingsRepository,
     fetchRoomingLists,
     createEventsAndRoomingLists,
     fetchRoomingListsByEvent,
+    createBookings,
     SeedEventsAndRoomingLists,
   ],
   controllers: [RoomingListsController],

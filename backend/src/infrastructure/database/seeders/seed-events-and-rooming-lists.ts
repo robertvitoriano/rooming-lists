@@ -1,6 +1,7 @@
 import { Inject } from '@nestjs/common';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
+import { BookingData, CreateBookingsUseCase } from 'src/core/use-cases/create-bookings';
 import {
   CreateEventsAndRoomingListsUseCase,
   EventRoomingListData,
@@ -10,15 +11,16 @@ export class SeedEventsAndRoomingLists {
   constructor(
     @Inject(CreateEventsAndRoomingListsUseCase)
     private readonly createRoomingListsAndEventsUseCase: CreateEventsAndRoomingListsUseCase,
+    private readonly createBookingsUseCase: CreateBookingsUseCase,
   ) {}
   async handle() {
-    const rawData = JSON.parse(
+    const roomingListsRawData = JSON.parse(
       readFileSync(
         resolve(__dirname, '..', '..', '..', 'data', 'rooming-lists.json'),
         'utf-8',
       ),
     );
-    const eventRoomingLists: EventRoomingListData[] = rawData.map(
+    const eventRoomingLists: EventRoomingListData[] = roomingListsRawData.map(
       ({ agreement_type, ...rest }) => ({
         agreementType: agreement_type,
         ...rest,
@@ -26,6 +28,17 @@ export class SeedEventsAndRoomingLists {
     );
     await this.createRoomingListsAndEventsUseCase.execute({
       eventRoomingLists,
+    });
+
+    const bookings: BookingData[] = JSON.parse(
+      readFileSync(
+        resolve(__dirname, '..', '..', '..', 'data', 'bookings.json'),
+        'utf-8',
+      ),
+    );
+
+    await this.createBookingsUseCase.execute({
+      bookings,
     });
   }
 }

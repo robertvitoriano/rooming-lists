@@ -8,6 +8,7 @@ import { FetchEventsWithRoomingListsUseCase } from 'src/core/use-cases/fetch-eve
 import { CreateBookingsUseCase } from 'src/core/use-cases/create-bookings';
 import { IBookingsRepository } from 'src/core/repositories/IBookingsRepository';
 import { BookingsRepository } from 'src/infrastructure/database/repositories/bookings-repository';
+import { FetchBookingsUseCase } from 'src/core/use-cases/fetch-bookings';
 
 export const roomingListsRepository = {
   provide: 'IRoomingListsRepository',
@@ -29,6 +30,14 @@ export const fetchRoomingLists = {
   provide: FetchRoomingListsUseCase,
   useFactory: (roomingListsRepository: IRoomingListsRepository) => {
     return new FetchRoomingListsUseCase(roomingListsRepository);
+  },
+};
+
+export const fetchBookings = {
+  inject: ['IBookingsRepository'],
+  provide: FetchBookingsUseCase,
+  useFactory: (BookingsRepository: IBookingsRepository) => {
+    return new FetchBookingsUseCase(BookingsRepository);
   },
 };
 

@@ -7,6 +7,7 @@ import {
   createBookings,
   createEventsAndRoomingLists,
   eventsRepository,
+  fetchBookings,
   fetchRoomingLists,
   fetchRoomingListsByEvent,
   roomingListsRepository,
@@ -17,6 +18,7 @@ import { EventModel } from 'src/infrastructure/database/models/event.model';
 import { BookingModel } from 'src/infrastructure/database/models/booking.model';
 import { RoomingListsController } from './controllers/rooming-lists.controller';
 import { SeedEventsAndRoomingLists } from 'src/infrastructure/database/seeders/seed-events-and-rooming-lists';
+import { BookingsController } from './controllers/bookings-controller';
 
 @Module({
   imports: [
@@ -37,8 +39,9 @@ import { SeedEventsAndRoomingLists } from 'src/infrastructure/database/seeders/s
     createEventsAndRoomingLists,
     fetchRoomingListsByEvent,
     createBookings,
+    fetchBookings,
     SeedEventsAndRoomingLists,
   ],
-  controllers: [RoomingListsController],
+  controllers: [RoomingListsController, BookingsController],
 })
 export class AppModule {}

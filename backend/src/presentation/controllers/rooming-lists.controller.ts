@@ -6,7 +6,6 @@ import { FetchRoomingListsUseCase } from 'src/core/use-cases/fetch-rooming-lists
 export class RoomingListsController {
   constructor(
     private readonly fetchRoomingListsUseCase: FetchRoomingListsUseCase,
-    private readonly fetchEventsWithRoomingListsUseCase: FetchEventsWithRoomingListsUseCase,
   ) {}
 
   @Get('/')
@@ -36,40 +35,7 @@ export class RoomingListsController {
       }),
     );
   }
-  @Get('/by-events')
-  async fetchRoomingListsByEvents() {
-    const { eventsWithRoomingLists } =
-      await this.fetchEventsWithRoomingListsUseCase.execute({});
-    return eventsWithRoomingLists.map(({ id, name, roomingLists }) => ({
-      id,
-      name,
-      roomingLists: roomingLists.map(
-        ({
-          agreementType,
-          createdAt,
-          cutOffDate,
-          eventId,
-          hotelId,
-          id: roomingListId,
-          rfpName,
-          status,
-          updatedAt,
-          bookingsCount
-        }) => ({
-          id: roomingListId.toValue(),
-          agreementType,
-          createdAt,
-          cutOffDate,
-          eventId,
-          hotelId,
-          rfpName,
-          status,
-          updatedAt,
-          bookingsCount
-        }),
-      ),
-    }));
-  }
+  
   // async fetchRoomingListsByEvent() {
   //   await this.fetchRoomingListsUseCase.execute();
   // }

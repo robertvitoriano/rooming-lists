@@ -15,8 +15,8 @@ export class EventsRepository implements IEventsRepository {
   ) {}
   async listWithRoomingLists(): Promise<EventWithRoomingLists[]> {
     const result = await this.eventsRepository.find({
-      select: ['id', 'name', 'roomingLists'],
-      relations: ['roomingLists'],
+      select: ['id', 'name', 'roomingLists', ],
+      relations: ['roomingLists', 'roomingLists.roomingListBookings'],
     });
 
     const events = result.map(({ id, name, roomingLists }) => ({

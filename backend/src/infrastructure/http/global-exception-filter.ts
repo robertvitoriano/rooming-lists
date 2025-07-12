@@ -4,19 +4,32 @@ import {
   ArgumentsHost,
   HttpStatus,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ErrorCodes } from 'src/core/errors/error-codes';
+import { EventNotFoundError } from 'src/core/errors/event-not-fount-error';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(GlobalExceptionFilter.name);
 
-  catch(exception: unknown, host: ArgumentsHost) {
+  catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
+    
+    
+    this.logger.error(exception?.message ?? "Unhandled exception", exception as any);
+    
+    if (exception instanceof EventNotFoundError) {
+      response.status(HttpStatus.NOT_FOUND).json({
+        statusCode: HttpStatus.NOT_FOUND,
+        code: ErrorCodes.EVENT_NOT_FOUND,
+        message: exception.message,
+      });
+      throw new NotFoundException(exception.message);
+    }
 
-    this.logger.error('Unhandled exception', exception as any);
 
     response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       statusCode: HttpStatus.INTERNAL_SERVER_ERROR,

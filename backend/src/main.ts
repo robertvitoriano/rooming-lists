@@ -8,9 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new GlobalExceptionFilter());
   app.enableCors({ origin: '*', credentials: true });
-
-  const logger = new Logger('Bootstrap');
-
+  
   const seedService = app.get<SeedService>(SeedService);
   await seedService.handle();
 

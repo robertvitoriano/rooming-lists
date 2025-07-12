@@ -15,11 +15,12 @@ export type RoomingListFilteringOptions = {
 };
 
 export interface IEventsRepository {
+  findById(eventId: string): Promise<Event | null>;
   create(event: Event): Promise<void>;
   findManyById(ids: string[]): Promise<Event[]>;
   list(): Promise<Event[]>;
   listWithRoomingLists(
-    paginationParams:PaginationParams,
+    paginationParams: PaginationParams,
     filters?: RoomingListFilteringOptions,
   ): Promise<{
     eventsWithRoomingLists: EventWithRoomingLists[];

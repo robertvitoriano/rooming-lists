@@ -16,6 +16,23 @@ export class EventsRepository implements IEventsRepository {
     private eventsRepository: Repository<EventModel>,
     private readonly dataSource: DataSource,
   ) {}
+  async findById(eventId: string): Promise<Event | null> {
+    const eventResult = await this.eventsRepository.findOne({
+      where:{
+        id:eventId
+      }
+    });
+    if(!eventResult) return null
+    const {
+      createdAt,
+      updatedAt,
+      id,
+      name,
+    } = eventResult
+    const event= new Event({ name }, { id, createdAt })
+    
+    return event
+  }
 
   async listWithRoomingLists(
     paginationParams: PaginationParams,
@@ -24,10 +41,7 @@ export class EventsRepository implements IEventsRepository {
     eventsWithRoomingLists: EventWithRoomingLists[];
     total: number;
   }> {
-    const {
-      page,
-      perPage
-    } = paginationParams
+    const { page, perPage } = paginationParams;
     const baseQuery = this.dataSource
       .getRepository(EventModel)
       .createQueryBuilder('event')

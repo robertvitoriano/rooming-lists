@@ -1,4 +1,6 @@
 import { RoomingList } from '../entities/rooming-list';
+import { EventNotFoundError } from '../errors/event-not-fount-error';
+import { IEventsRepository } from '../repositories/IEventsRepository';
 import { IRoomingListsRepository } from '../repositories/IRoomingListsRepository';
 import { PaginationParams } from '../repositories/pagination-params';
 interface FetchRoomingListsByEventRequest extends PaginationParams {
@@ -11,11 +13,17 @@ interface FetchRoomingListsResponse {
 export class FetchRoomingListsByEventUseCase {
   constructor(
     private readonly roominglistRepository: IRoomingListsRepository,
+    private readonly eventsRepository: IEventsRepository,
+
   ) {}
   async execute(
     params: FetchRoomingListsByEventRequest,
   ): Promise<FetchRoomingListsResponse> {
     const { eventId, page, perPage } = params;
+    const event = await this.eventsRepository.findById(eventId)
+    
+    if (!event) throw new EventNotFoundError(eventId);
+      
     const {roomingLists, total} = await this.roominglistRepository.findManyByEventId(
       eventId,
       {

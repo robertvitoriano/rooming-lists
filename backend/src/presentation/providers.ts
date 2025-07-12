@@ -66,35 +66,40 @@ export const createEventsAndRoomingLists = {
 };
 
 export const fetchBookingsByRoomingList = {
-  inject: ['IBookingsRepository','IRoomingListsRepository'],
+  inject: ['IBookingsRepository', 'IRoomingListsRepository'],
   provide: FetchBookingsByRoomingListUseCase,
   useFactory: (
     bookingsRepository: IBookingsRepository,
-    roomingListsRepository:IRoomingListsRepository
+    roomingListsRepository: IRoomingListsRepository,
   ) => {
     return new FetchBookingsByRoomingListUseCase(
       bookingsRepository,
-      roomingListsRepository
+      roomingListsRepository,
     );
   },
 };
 
 export const fetchRoomingListsByEventUseCase = {
-    inject: ['IRoomingListsRepository'],
+  inject: ['IRoomingListsRepository', 'IEventsRepository'],
   provide: FetchRoomingListsByEventUseCase,
   useFactory: (
-    roomingListsRepository:IRoomingListsRepository
+    roomingListsRepository: IRoomingListsRepository,
+    eventsRepository: IEventsRepository,
   ) => {
     return new FetchRoomingListsByEventUseCase(
-      roomingListsRepository
+      roomingListsRepository,
+      eventsRepository,
     );
   },
-}
+};
 
 export const createBookings = {
-  inject: ['IBookingsRepository', 'IRoomingListsRepository',],
+  inject: ['IBookingsRepository', 'IRoomingListsRepository'],
   provide: CreateBookingsUseCase,
-  useFactory: (bookingsRepository: IBookingsRepository, roomingListRepository: IRoomingListsRepository) => {
+  useFactory: (
+    bookingsRepository: IBookingsRepository,
+    roomingListRepository: IRoomingListsRepository,
+  ) => {
     return new CreateBookingsUseCase(bookingsRepository, roomingListRepository);
   },
 };

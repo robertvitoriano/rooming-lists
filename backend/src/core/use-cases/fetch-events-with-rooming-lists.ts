@@ -1,6 +1,5 @@
 import {
   IRoomingListStatus,
-  RoomingListStatus,
 } from '../entities/value-objects/rooming-list-status';
 import {
   EventWithRoomingLists,
@@ -9,6 +8,7 @@ import {
 
 interface FetchEventsWithRoomingListsRequest {
   status?: IRoomingListStatus;
+  eventName?:string
 }
 export interface FetchEventsWithRoomingListsResponse {
   eventsWithRoomingLists: EventWithRoomingLists[];
@@ -19,9 +19,14 @@ export class FetchEventsWithRoomingListsUseCase {
   async execute(
     params: FetchEventsWithRoomingListsRequest,
   ): Promise<FetchEventsWithRoomingListsResponse> {
+    const {
+      status,
+      eventName
+    } = params
     const eventsWithRoomingLists =
       await this.eventslistRepository.listWithRoomingLists({
-        status: params.status,
+        status,
+        eventName
       });
 
     return { eventsWithRoomingLists };

@@ -20,8 +20,7 @@ export class FetchBookingsByRoomingListUseCase {
   async execute(params: FetchBookingsRequest): Promise<FetchBookingsResponse> {
     const { roomingListId } = params;
 
-    const roomingList =
-      await this.roomingListRepository.findById(roomingListId);
+    const roomingList = await this.roomingListRepository.findById(roomingListId);
 
     if (!roomingList) {
       throw new RoomingListNotFoundError(roomingListId);

@@ -15,57 +15,57 @@ export class EventsRepository implements IEventsRepository {
     private eventsRepository: Repository<EventModel>,
   ) {}
 
-  async listWithRoomingLists(
-    filters?: RoomingListFilteringOptions,
-  ): Promise<EventWithRoomingLists[]> {
-    
-    const whereClause =
-      Object.keys(filters || {}).length > 0
-        ? {
-            roomingLists: {
-              ...filters,
-            },
-          }
-        : {};
-        
-    const result = await this.eventsRepository.find({
-      select: ['id', 'name', 'roomingLists'],
-      relations: ['roomingLists', 'roomingLists.roomingListBookings'],
-      where: whereClause,
-    });
+async listWithRoomingLists(
+  filters?: RoomingListFilteringOptions,
+): Promise<EventWithRoomingLists[]> {
+  const where: any = {};
 
-    const events = result.map(({ id, name, roomingLists }) => ({
-      id,
-      name,
-      roomingLists: roomingLists.map(
-        ({
-          agreementType,
-          cutOffDate,
-          eventId,
-          hotelId,
-          id,
-          rfpName,
-          status,
-          createdAt,
-          roomingListBookings,
-        }) =>
-          new RoomingList(
-            {
-              eventId,
-              hotelId,
-              rfpName,
-              agreementType,
-              cutOffDate,
-              status,
-            },
-            { id, createdAt },
-            { bookingsCount: roomingListBookings?.length },
-          ),
-      ),
-    }));
-
-    return events;
+  if (filters?.eventName) {
+    where.name = filters.eventName;
   }
+
+  if (filters?.status) {
+    where.roomingLists = { status: filters.status };
+  }
+
+  const result = await this.eventsRepository.find({
+    select: ['id', 'name', 'roomingLists'],
+    relations: ['roomingLists', 'roomingLists.roomingListBookings'],
+    where,
+  });
+
+  const events = result.map(({ id, name, roomingLists }) => ({
+    id,
+    name,
+    roomingLists: roomingLists.map(
+      ({
+        agreementType,
+        cutOffDate,
+        eventId,
+        hotelId,
+        id,
+        rfpName,
+        status,
+        createdAt,
+        roomingListBookings,
+      }) =>
+        new RoomingList(
+          {
+            eventId,
+            hotelId,
+            rfpName,
+            agreementType,
+            cutOffDate,
+            status,
+          },
+          { id, createdAt },
+          { bookingsCount: roomingListBookings?.length },
+        ),
+    ),
+  }));
+
+  return events;
+}
 
   async list(): Promise<Event[]> {
     const result = await this.eventsRepository.find();

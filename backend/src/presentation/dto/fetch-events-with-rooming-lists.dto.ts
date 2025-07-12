@@ -1,10 +1,11 @@
 import { IsOptional, IsIn } from 'class-validator';
-import { IRoomingListStatus } from 'src/core/entities/value-objects/rooming-list-status';
 
 export class FetchRoomingListsQueryDto {
   @IsOptional()
   @IsIn(['active', 'closed', 'cancelled'])
   status?: string;
+  @IsOptional()
+  eventName?: string
 }
 
 export const roomingListsStatusMap = {

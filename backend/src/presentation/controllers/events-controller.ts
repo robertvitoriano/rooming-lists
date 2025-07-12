@@ -20,9 +20,14 @@ export class EventsController {
   async fetchRoomingListsByEvents(
     @Query() query: FetchRoomingListsQueryDto,
   ): Promise<ControllerResponse<EventWithRoomingListResponseData[]>> {
+    const {
+      status,
+      eventName
+    } = query
     const { eventsWithRoomingLists } =
       await this.fetchEventsWithRoomingListsUseCase.execute({
-        status: roomingListsStatusMap[query.status as string],
+        status: roomingListsStatusMap[status as string],
+        eventName
       });
 
     const data = eventsWithRoomingLists.map(({ id, name, roomingLists }) => ({

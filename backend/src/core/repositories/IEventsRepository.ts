@@ -10,6 +10,7 @@ export interface EventWithRoomingLists {
 
 export type RoomingListFilteringOptions = {
   status?: IRoomingListStatus;
+  eventName?: string
 };
 
 export interface IEventsRepository {

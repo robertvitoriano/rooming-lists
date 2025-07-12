@@ -73,14 +73,4 @@ export class RoomingListsController {
       message: 'Bookings fetched successfully',
     };
   }
-  
-
-
-  // async fetchRoomingListsByEvent() {
-  //   await this.fetchRoomingListsUseCase.execute();
-  // }
-
-  // async createRoomingListsFromUpload() {
-  //   await this.fetchRoomingListsUseCase.execute();
-  // }
 }

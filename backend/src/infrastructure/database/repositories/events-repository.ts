@@ -9,6 +9,7 @@ import {
   RoomingListFilteringOptions,
 } from 'src/core/repositories/IEventsRepository';
 import { RoomingList } from 'src/core/entities/rooming-list';
+import { PaginationParams } from 'src/core/repositories/pagination-params';
 export class EventsRepository implements IEventsRepository {
   constructor(
     @InjectRepository(EventModel)
@@ -17,57 +18,89 @@ export class EventsRepository implements IEventsRepository {
   ) {}
 
   async listWithRoomingLists(
+    paginationParams: PaginationParams,
     filters?: RoomingListFilteringOptions,
-  ): Promise<EventWithRoomingLists[]> {
-    const query = this.dataSource
+  ): Promise<{
+    eventsWithRoomingLists: EventWithRoomingLists[];
+    total: number;
+  }> {
+    const {
+      page,
+      perPage
+    } = paginationParams
+    const baseQuery = this.dataSource
       .getRepository(EventModel)
       .createQueryBuilder('event')
       .leftJoinAndSelect('event.roomingLists', 'roomingList')
       .leftJoinAndSelect('roomingList.roomingListBookings', 'booking');
 
+    const countQuery = this.dataSource
+      .getRepository(EventModel)
+      .createQueryBuilder('event');
+
     if (filters?.eventName) {
-      query.andWhere('event.name ILIKE :eventName', {
+      baseQuery.andWhere('event.name ILIKE :eventName', {
+        eventName: `%${filters.eventName}%`,
+      });
+
+      countQuery.andWhere('event.name ILIKE :eventName', {
         eventName: `%${filters.eventName}%`,
       });
     }
 
     if (filters?.status) {
-      query.andWhere('roomingList.status = :status', {
+      baseQuery.andWhere('roomingList.status = :status', {
         status: filters.status,
       });
+
+      countQuery
+        .leftJoin('event.roomingLists', 'roomingList')
+        .andWhere('roomingList.status = :status', {
+          status: filters.status,
+        });
     }
 
-    const result = await query.getMany();
+    const [result, total] = await Promise.all([
+      baseQuery.getMany(),
+      countQuery.getCount(),
+    ]);
 
-    return result.map(({ id, name, roomingLists }) => ({
-      id,
-      name,
-      roomingLists: roomingLists.map(
-        ({
-          agreementType,
-          cutOffDate,
-          eventId,
-          hotelId,
-          id,
-          rfpName,
-          status,
-          createdAt,
-          roomingListBookings,
-        }) =>
-          new RoomingList(
-            {
-              eventId,
-              hotelId,
-              rfpName,
-              agreementType,
-              cutOffDate,
-              status,
-            },
-            { id, createdAt },
-            { bookingsCount: roomingListBookings?.length ?? 0 },
-          ),
-      ),
-    }));
+    const eventsWithRoomingLists: EventWithRoomingLists[] = result.map(
+      ({ id, name, roomingLists }) => ({
+        id,
+        name,
+        roomingLists: roomingLists.map(
+          ({
+            agreementType,
+            cutOffDate,
+            eventId,
+            hotelId,
+            id,
+            rfpName,
+            status,
+            createdAt,
+            roomingListBookings,
+          }) =>
+            new RoomingList(
+              {
+                eventId,
+                hotelId,
+                rfpName,
+                agreementType,
+                cutOffDate,
+                status,
+              },
+              { id, createdAt },
+              { bookingsCount: roomingListBookings?.length ?? 0 },
+            ),
+        ),
+      }),
+    );
+
+    return {
+      eventsWithRoomingLists,
+      total,
+    };
   }
 
   async list(): Promise<Event[]> {

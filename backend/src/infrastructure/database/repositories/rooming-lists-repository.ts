@@ -3,44 +3,57 @@ import { In, Repository } from 'typeorm';
 import { RoomingListModel } from '../models/rooming-list.model';
 import { IRoomingListsRepository } from 'src/core/repositories/IRoomingListsRepository';
 import { RoomingList } from 'src/core/entities/rooming-list';
+import { PaginationParams } from 'src/core/repositories/pagination-params';
 
 export class RoomingListsRepository implements IRoomingListsRepository {
   constructor(
     @InjectRepository(RoomingListModel)
     private roomingListsRepository: Repository<RoomingListModel>,
   ) {}
-  async findManyByEventId(eventId: string): Promise<RoomingList[]> {
-    const result = await this.roomingListsRepository.find({
-      where: {
-        eventId: eventId,
-      },
-    });
+  async findManyByEventId(
+    eventId: string,
+    paginationParams: PaginationParams,
+  ): Promise<{ roomingLists: RoomingList[]; total: number }> {
+    const { page, perPage } = paginationParams;
 
-    const roomingLists: RoomingList[] = result.map(
-      ({
-        id,
-        agreementType,
-        createdAt,
-        cutOffDate,
-        eventId,
-        hotelId,
-        rfpName,
-        status,
-        updatedAt,
-      }) =>
-        new RoomingList(
-          {
-            agreementType,
-            cutOffDate,
-            eventId,
-            hotelId,
-            rfpName,
-            status,
-          },
-          { id, createdAt, updatedAt },
-        ),
-    );
-    return roomingLists;
+    const skip = (page - 1) * perPage;
+    const take = perPage;
+
+    const [roomingLists, total] =
+      await this.roomingListsRepository.findAndCount({
+        where: { eventId },
+        skip,
+        take,
+        order: { createdAt: 'DESC' },
+      });
+
+    return {
+      total,
+      roomingLists: roomingLists.map(
+        ({
+          id,
+          agreementType,
+          createdAt,
+          cutOffDate,
+          eventId,
+          hotelId,
+          rfpName,
+          status,
+          updatedAt,
+        }) =>
+          new RoomingList(
+            {
+              agreementType,
+              cutOffDate,
+              eventId,
+              hotelId,
+              rfpName,
+              status,
+            },
+            { id, createdAt, updatedAt },
+          ),
+      ),
+    };
   }
 
   async findById(roomingListId: string): Promise<RoomingList | null> {

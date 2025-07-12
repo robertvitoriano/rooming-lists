@@ -1,17 +1,17 @@
-import {
-  IRoomingListStatus,
-} from '../entities/value-objects/rooming-list-status';
+import { IRoomingListStatus } from '../entities/value-objects/rooming-list-status';
 import {
   EventWithRoomingLists,
   IEventsRepository,
 } from '../repositories/IEventsRepository';
+import { PaginationParams } from '../repositories/pagination-params';
 
-interface FetchEventsWithRoomingListsRequest {
+interface FetchEventsWithRoomingListsRequest extends PaginationParams {
   status?: IRoomingListStatus;
-  eventName?:string
+  eventName?: string;
 }
 export interface FetchEventsWithRoomingListsResponse {
   eventsWithRoomingLists: EventWithRoomingLists[];
+  total: number;
 }
 
 export class FetchEventsWithRoomingListsUseCase {
@@ -19,16 +19,19 @@ export class FetchEventsWithRoomingListsUseCase {
   async execute(
     params: FetchEventsWithRoomingListsRequest,
   ): Promise<FetchEventsWithRoomingListsResponse> {
-    const {
-      status,
-      eventName
-    } = params
-    const eventsWithRoomingLists =
-      await this.eventslistRepository.listWithRoomingLists({
-        status,
-        eventName
-      });
+    const { status, eventName, page, perPage } = params;
+    const { eventsWithRoomingLists, total } =
+      await this.eventslistRepository.listWithRoomingLists(
+        {
+          page,
+          perPage,
+        },
+        {
+          status,
+          eventName,
+        },
+      );
 
-    return { eventsWithRoomingLists };
+    return { eventsWithRoomingLists, total };
   }
 }

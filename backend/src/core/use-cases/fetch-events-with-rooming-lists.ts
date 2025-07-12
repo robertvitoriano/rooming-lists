@@ -1,3 +1,4 @@
+import { IRoomingListAgreementType } from '../entities/value-objects/rooming-list-agreement-type';
 import { IRoomingListStatus } from '../entities/value-objects/rooming-list-status';
 import {
   EventWithRoomingLists,
@@ -7,6 +8,8 @@ import { PaginationParams } from '../repositories/types';
 
 interface FetchEventsWithRoomingListsRequest extends PaginationParams {
   status?: IRoomingListStatus;
+  rfpName?: string;
+  aggrementType?: IRoomingListAgreementType;
   eventName?: string;
 }
 export interface FetchEventsWithRoomingListsResponse {
@@ -19,7 +22,8 @@ export class FetchEventsWithRoomingListsUseCase {
   async execute(
     params: FetchEventsWithRoomingListsRequest,
   ): Promise<FetchEventsWithRoomingListsResponse> {
-    const { status, eventName, page, perPage, sort } = params;
+    const { status, eventName, aggrementType, rfpName, page, perPage, sort } =
+      params;
     const { eventsWithRoomingLists, total } =
       await this.eventslistRepository.listWithRoomingLists(
         {
@@ -30,6 +34,8 @@ export class FetchEventsWithRoomingListsUseCase {
         {
           status,
           eventName,
+          rfpName,
+          aggrementType,
         },
       );
 

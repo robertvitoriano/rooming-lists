@@ -1,15 +1,43 @@
-import { IsOptional, IsIn } from 'class-validator';
+import { IsOptional, IsEnum, IsInt, IsString, Min } from 'class-validator';
+import { Type } from 'class-transformer';
+import { Sorting } from 'src/core/repositories/types';
 
 export class FetchRoomingListsQueryDto {
   @IsOptional()
-  @IsIn(['active', 'closed', 'cancelled'])
-  status?: string;
+  @IsString()
+  eventName?: string;
+
   @IsOptional()
-  eventName?: string
+  @IsString()
+  status?: string;
+
+  @IsOptional()
+  @IsString()
+  rfpName?: string;
+
+  @IsOptional()
+  @IsString()
+  aggrementType?: string;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  page: number = 1;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  perPage: number = 10;
+
+  @IsOptional()
+  @IsEnum(Sorting)
+  sort: Sorting = Sorting.DESC;
 }
 
 export const roomingListsStatusMap = {
-  active: "received",
-  closed: "completed",
-  cancelled: "achived",
+  active: 'received',
+  closed: 'completed',
+  cancelled: 'achived',
 };

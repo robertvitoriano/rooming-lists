@@ -6,10 +6,10 @@ import { Event } from 'src/core/entities/event';
 import {
   EventWithRoomingLists,
   IEventsRepository,
-  RoomingListFilteringOptions,
 } from 'src/core/repositories/IEventsRepository';
 import { RoomingList } from 'src/core/entities/rooming-list';
 import { PaginationParams, Sorting } from 'src/core/repositories/types';
+import { RoomingListFilteringOptions } from 'src/core/repositories/IRoomingListsRepository';
 export class EventsRepository implements IEventsRepository {
   constructor(
     @InjectRepository(EventModel)
@@ -70,6 +70,28 @@ export class EventsRepository implements IEventsRepository {
         .leftJoin('event.roomingLists', 'roomingList')
         .andWhere('roomingList.status = :status', {
           status: filters.status,
+        });
+    }
+
+    if (filters?.aggrementType) {
+      baseQuery.andWhere('roomingList.status = :aggrementType', {
+        aggrementType: filters.aggrementType,
+      });
+      countQuery
+        .leftJoin('event.roomingLists', 'roomingList')
+        .andWhere('roomingList.agreement_type ILIKE :aggrementType', {
+          aggrementType: `%${filters.aggrementType}%`,
+        });
+    }
+
+    if (filters?.rfpName) {
+      baseQuery.andWhere('roomingList.rfp_name ILIKE :rfpName', {
+        rfpName: `%${filters.rfpName}%`,
+      });
+      countQuery
+        .leftJoin('event.roomingLists', 'roomingList')
+        .andWhere('roomingList.rfp_name ILIKE :rfpName', {
+          rfpName: `%${filters.rfpName}%`,
         });
     }
 

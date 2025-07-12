@@ -14,6 +14,9 @@ import {
 } from '../types/events-with-rooming-lists';
 import { FetchRoomingListsByEventUseCase } from 'src/core/use-cases/fetch-rooming-list-by-event';
 import { Sorting } from 'src/core/repositories/types';
+import { IRoomingListAgreementType } from 'src/core/entities/value-objects/rooming-list-agreement-type';
+import { validateOrReject } from 'class-validator';
+import { plainToInstance } from 'class-transformer';
 
 @Controller('/events')
 export class EventsController {
@@ -24,19 +27,22 @@ export class EventsController {
 
   @Get('/')
   async fetchEventsWithRoomingLists(
-    @Query() query: FetchRoomingListsQueryDto,
-    @Query('page') page = 1,
-    @Query('perPage') perPage = 10,
-    @Query('sort') sort: Sorting,
+    @Query() query: Record<string, any>,
   ): Promise<ControllerResponse<EventWithRoomingListResponseData[]>> {
-    const { status, eventName } = query;
+    const queryDto = plainToInstance(FetchRoomingListsQueryDto, query);
+
+    const { eventName, status, rfpName, aggrementType, page, perPage, sort } =
+      queryDto;
+
     const { eventsWithRoomingLists, total } =
       await this.fetchEventsWithRoomingListsUseCase.execute({
         status: roomingListsStatusMap[status as string],
+        rfpName,
+        aggrementType: aggrementType as IRoomingListAgreementType,
         eventName,
         page,
         perPage,
-        sort: sort.toUpperCase() as Sorting,
+        sort,
       });
 
     const data = eventsWithRoomingLists.map(({ id, name, roomingLists }) => ({
@@ -74,8 +80,8 @@ export class EventsController {
       meta: {
         total,
         pagination: {
-          currentPage: Number(page),
-          perPage: Number(perPage),
+          currentPage: page,
+          perPage: perPage,
           currentPageTotal: eventsWithRoomingLists.length,
           totalPages: Math.ceil(total / perPage),
         },
@@ -87,16 +93,21 @@ export class EventsController {
   @Get('/:eventId/rooming-lists')
   async fetchRoomingListsByEventId(
     @Param('eventId') eventId: string,
-    @Query('page') page = 1,
-    @Query('perPage') perPage = 3,
-    @Query('sort') sort: Sorting = 'DESC',
+    @Query() query: FetchRoomingListsQueryDto,
   ): Promise<ControllerResponse<RoomingListResponseData[]>> {
+    const queryDto = plainToInstance(FetchRoomingListsQueryDto, query);
+
+    const { status, rfpName, aggrementType, page, perPage, sort } =
+      queryDto;
     const { roomingLists, total } =
       await this.fetchRoomingListsByEventUseCase.execute({
+        status: roomingListsStatusMap[status as string],
+        rfpName,
+        aggrementType: aggrementType as IRoomingListAgreementType,
         eventId,
-        page,
-        perPage,
-        sort:sort.toUpperCase() as Sorting,
+        page: Number(page),
+        perPage: Number(perPage),
+        sort: sort.toUpperCase() as Sorting,
       });
 
     return {

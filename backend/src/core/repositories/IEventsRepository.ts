@@ -1,6 +1,6 @@
 import { Event } from '../entities/event';
 import { RoomingList } from '../entities/rooming-list';
-import { IRoomingListStatus } from '../entities/value-objects/rooming-list-status';
+import { RoomingListFilteringOptions } from './IRoomingListsRepository';
 import { PaginationParams } from './types';
 
 export interface EventWithRoomingLists {
@@ -8,11 +8,6 @@ export interface EventWithRoomingLists {
   name: string;
   roomingLists: RoomingList[];
 }
-
-export type RoomingListFilteringOptions = {
-  status?: IRoomingListStatus;
-  eventName?: string;
-};
 
 export interface IEventsRepository {
   findById(eventId: string): Promise<Event | null>;
@@ -26,5 +21,5 @@ export interface IEventsRepository {
     eventsWithRoomingLists: EventWithRoomingLists[];
     total: number;
   }>;
-  deleteAll():Promise<void>
+  deleteAll(): Promise<void>;
 }

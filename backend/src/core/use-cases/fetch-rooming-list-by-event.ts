@@ -1,10 +1,16 @@
 import { RoomingList } from '../entities/rooming-list';
+import { IRoomingListAgreementType } from '../entities/value-objects/rooming-list-agreement-type';
+import { IRoomingListStatus } from '../entities/value-objects/rooming-list-status';
 import { EventNotFoundError } from '../errors/event-not-fount-error';
 import { IEventsRepository } from '../repositories/IEventsRepository';
 import { IRoomingListsRepository } from '../repositories/IRoomingListsRepository';
 import { PaginationParams } from '../repositories/types';
 interface FetchRoomingListsByEventRequest extends PaginationParams {
   eventId: string;
+  status?: IRoomingListStatus;
+  rfpName?: string;
+  aggrementType?: IRoomingListAgreementType;
+  eventName?: string;
 }
 interface FetchRoomingListsResponse {
   roomingLists: RoomingList[];
@@ -18,7 +24,16 @@ export class FetchRoomingListsByEventUseCase {
   async execute(
     params: FetchRoomingListsByEventRequest,
   ): Promise<FetchRoomingListsResponse> {
-    const { eventId, page, perPage, sort } = params;
+    const {
+      eventId,
+      page,
+      perPage,
+      sort,
+      aggrementType,
+      eventName,
+      rfpName,
+      status,
+    } = params;
     const event = await this.eventsRepository.findById(eventId);
 
     if (!event) throw new EventNotFoundError(eventId);
@@ -30,6 +45,12 @@ export class FetchRoomingListsByEventUseCase {
           page,
           perPage,
           sort,
+        },
+        {
+          aggrementType,
+          eventName,
+          rfpName,
+          status,
         },
       );
 

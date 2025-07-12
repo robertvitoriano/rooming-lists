@@ -11,7 +11,7 @@ export class RoomingListsRepository implements IRoomingListsRepository {
     private roomingListsRepository: Repository<RoomingListModel>,
   ) {}
   async deleteAll(): Promise<void> {
-    await this.roomingListsRepository.deleteAll()
+    await this.roomingListsRepository.deleteAll();
   }
   async findManyByEventId(
     eventId: string,

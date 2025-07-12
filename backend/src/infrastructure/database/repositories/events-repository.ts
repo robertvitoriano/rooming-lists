@@ -27,7 +27,7 @@ export class EventsRepository implements IEventsRepository {
     });
     if (!eventResult) return null;
     const { createdAt, updatedAt, id, name } = eventResult;
-    const event = new Event({ name }, { id, createdAt });
+    const event = new Event({ name }, { id, createdAt, updatedAt });
 
     return event;
   }
@@ -41,6 +41,7 @@ export class EventsRepository implements IEventsRepository {
   }> {
     const { page, perPage } = paginationParams;
     const skip = (page - 1) * perPage;
+    const ROOMING_LISTS_COUNT = 3;
 
     const baseQuery = this.dataSource
       .getRepository(EventModel)
@@ -83,31 +84,34 @@ export class EventsRepository implements IEventsRepository {
       ({ id, name, roomingLists }) => ({
         id,
         name,
-        roomingLists: roomingLists.map(
-          ({
-            agreementType,
-            cutOffDate,
-            eventId,
-            hotelId,
-            id,
-            rfpName,
-            status,
-            createdAt,
-            roomingListBookings,
-          }) =>
-            new RoomingList(
-              {
-                eventId,
-                hotelId,
-                rfpName,
-                agreementType,
-                cutOffDate,
-                status,
-              },
-              { id, createdAt },
-              { bookingsCount: roomingListBookings?.length ?? 0 },
-            ),
-        ),
+        roomingLists: roomingLists
+          .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+          .slice(0, ROOMING_LISTS_COUNT)
+          .map(
+            ({
+              agreementType,
+              cutOffDate,
+              eventId,
+              hotelId,
+              id,
+              rfpName,
+              status,
+              createdAt,
+              roomingListBookings,
+            }) =>
+              new RoomingList(
+                {
+                  eventId,
+                  hotelId,
+                  rfpName,
+                  agreementType,
+                  cutOffDate,
+                  status,
+                },
+                { id, createdAt },
+                { bookingsCount: roomingListBookings?.length ?? 0 },
+              ),
+          ),
       }),
     );
 

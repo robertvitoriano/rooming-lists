@@ -9,6 +9,39 @@ export class RoomingListsRepository implements IRoomingListsRepository {
     @InjectRepository(RoomingListModel)
     private roomingListsRepository: Repository<RoomingListModel>,
   ) {}
+  async findManyByEventId(eventId: string): Promise<RoomingList[]> {
+    const result = await this.roomingListsRepository.find({
+      where: {
+        eventId: eventId,
+      },
+    });
+
+    const roomingLists: RoomingList[] = result.map(
+      ({
+        id,
+        agreementType,
+        createdAt,
+        cutOffDate,
+        eventId,
+        hotelId,
+        rfpName,
+        status,
+        updatedAt,
+      }) =>
+        new RoomingList(
+          {
+            agreementType,
+            cutOffDate,
+            eventId,
+            hotelId,
+            rfpName,
+            status,
+          },
+          { id, createdAt, updatedAt },
+        ),
+    );
+    return roomingLists;
+  }
 
   async findById(roomingListId: string): Promise<RoomingList | null> {
     const result = await this.roomingListsRepository.findOne({
@@ -16,9 +49,9 @@ export class RoomingListsRepository implements IRoomingListsRepository {
         id: roomingListId,
       },
     });
-    
-    if(!result) return null
-    
+
+    if (!result) return null;
+
     const {
       id,
       agreementType,

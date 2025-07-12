@@ -10,6 +10,7 @@ import { IBookingsRepository } from 'src/core/repositories/IBookingsRepository';
 import { BookingsRepository } from 'src/infrastructure/database/repositories/bookings-repository';
 import { FetchBookingsUseCase } from 'src/core/use-cases/fetch-bookings';
 import { FetchBookingsByRoomingListUseCase } from 'src/core/use-cases/fetch-bookings-by-rooming-list';
+import { FetchRoomingListsByEventUseCase } from 'src/core/use-cases/fetch-rooming-list-by-event';
 
 export const roomingListsRepository = {
   provide: 'IRoomingListsRepository',
@@ -77,6 +78,18 @@ export const fetchBookingsByRoomingList = {
     );
   },
 };
+
+export const fetchRoomingListsByEventUseCase = {
+    inject: ['IRoomingListsRepository'],
+  provide: FetchRoomingListsByEventUseCase,
+  useFactory: (
+    roomingListsRepository:IRoomingListsRepository
+  ) => {
+    return new FetchRoomingListsByEventUseCase(
+      roomingListsRepository
+    );
+  },
+}
 
 export const createBookings = {
   inject: ['IBookingsRepository', 'IRoomingListsRepository',],

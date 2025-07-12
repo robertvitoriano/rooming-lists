@@ -40,7 +40,7 @@ export class RoomingListsController {
   }
 
   @Get('/:id/bookings')
-  async getBookingsForRoomingList(
+  async fetchBookingsForRoomingList(
     @Param('id') roomingListId: string,
   ): Promise<ControllerResponse<BookingResponseData[]>> {
     const { bookings } = await this.fetchBookingsByRoomingListUseCase.execute({
@@ -73,6 +73,8 @@ export class RoomingListsController {
       message: 'Bookings fetched successfully',
     };
   }
+  
+
 
   // async fetchRoomingListsByEvent() {
   //   await this.fetchRoomingListsUseCase.execute();

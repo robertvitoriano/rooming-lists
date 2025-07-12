@@ -11,6 +11,7 @@ import {
   fetchBookingsByRoomingList,
   fetchRoomingLists,
   fetchRoomingListsByEvent,
+  fetchRoomingListsByEventUseCase,
   roomingListsRepository,
 } from './providers';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -44,6 +45,7 @@ import { FileReaderService } from 'src/infrastructure/file/file-reader.service';
     createBookings,
     fetchBookings,
     fetchBookingsByRoomingList,
+    fetchRoomingListsByEventUseCase,
     SeedService,
     FileReaderService,
   ],

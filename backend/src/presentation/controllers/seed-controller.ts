@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { SeedService } from 'src/application/seed/seed.service';
+import { SeedService } from 'src/application/services/seed.service';
 import { TruncateDatabaseUseCase } from 'src/core/use-cases/truncate-database-use-case';
 
 @Controller('/seed')

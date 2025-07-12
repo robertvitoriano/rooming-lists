@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import {
   FetchEventsWithRoomingListsResponse,
   FetchEventsWithRoomingListsUseCase,
@@ -15,9 +15,9 @@ import {
 import { FetchRoomingListsByEventUseCase } from 'src/core/use-cases/fetch-rooming-list-by-event';
 import { Sorting } from 'src/core/repositories/types';
 import { IRoomingListAgreementType } from 'src/core/entities/value-objects/rooming-list-agreement-type';
-import { validateOrReject } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
-
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+@UseGuards(JwtAuthGuard)
 @Controller('/events')
 export class EventsController {
   constructor(

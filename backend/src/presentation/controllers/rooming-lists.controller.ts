@@ -1,10 +1,11 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { FetchRoomingListsUseCase } from 'src/core/use-cases/fetch-rooming-lists';
 import { ControllerResponse } from '../types/controller-response';
 import { FetchBookingsByRoomingListUseCase } from 'src/core/use-cases/fetch-bookings-by-rooming-list';
 import { BookingResponseData } from '../types/booking';
 import { RoomingListResponseData } from '../types/events-with-rooming-lists';
-
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+@UseGuards(JwtAuthGuard)
 @Controller('/rooming-lists')
 export class RoomingListsController {
   constructor(

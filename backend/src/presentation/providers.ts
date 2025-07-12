@@ -11,6 +11,7 @@ import { BookingsRepository } from 'src/infrastructure/database/repositories/boo
 import { FetchBookingsUseCase } from 'src/core/use-cases/fetch-bookings';
 import { FetchBookingsByRoomingListUseCase } from 'src/core/use-cases/fetch-bookings-by-rooming-list';
 import { FetchRoomingListsByEventUseCase } from 'src/core/use-cases/fetch-rooming-list-by-event';
+import { TruncateDatabaseUseCase } from 'src/core/use-cases/truncate-database-use-case';
 
 export const roomingListsRepository = {
   provide: 'IRoomingListsRepository',
@@ -101,5 +102,25 @@ export const createBookings = {
     roomingListRepository: IRoomingListsRepository,
   ) => {
     return new CreateBookingsUseCase(bookingsRepository, roomingListRepository);
+  },
+};
+
+export const truncateDatabaseUseCase = {
+  inject: [
+    'IEventsRepository,',
+    'IRoomingListsRepository',
+    'IBookingsRepository',
+  ],
+  provide: CreateBookingsUseCase,
+  useFactory: (
+    bookingsRepository: IBookingsRepository,
+    roomingListRepository: IRoomingListsRepository,
+    eventsRepository: IEventsRepository,
+  ) => {
+    return new TruncateDatabaseUseCase(
+      eventsRepository,
+      roomingListRepository,
+      bookingsRepository,
+    );
   },
 };

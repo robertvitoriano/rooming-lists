@@ -10,6 +10,9 @@ export class RoomingListsRepository implements IRoomingListsRepository {
     @InjectRepository(RoomingListModel)
     private roomingListsRepository: Repository<RoomingListModel>,
   ) {}
+  async deleteAll(): Promise<void> {
+    await this.roomingListsRepository.deleteAll()
+  }
   async findManyByEventId(
     eventId: string,
     paginationParams: PaginationParams,

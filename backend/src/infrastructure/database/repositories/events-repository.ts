@@ -16,6 +16,9 @@ export class EventsRepository implements IEventsRepository {
     private eventsRepository: Repository<EventModel>,
     private readonly dataSource: DataSource,
   ) {}
+  async deleteAll(): Promise<void> {
+    await this.eventsRepository.deleteAll()
+  }
   async findById(eventId: string): Promise<Event | null> {
     const eventResult = await this.eventsRepository.findOne({
       where:{

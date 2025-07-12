@@ -17,13 +17,19 @@ export class BookingsRepository implements IBookingsRepository {
     @InjectRepository(RoomingListBookingModel)
     private roomingListBookingRepository: Repository<RoomingListBookingModel>,
   ) {}
+  async deleteAll(): Promise<void> {
+    await this.bookingsRepository.deleteAll();
+  }
+  async deleteAllRoomingListsRelations(): Promise<void> {
+    await this.roomingListBookingRepository.deleteAll();
+  }
   async listByRoomingListId(roomingListId: string): Promise<Booking[]> {
     const result = await this.bookingsRepository.find({
-      where:{
-        roomingListBooking:{
-          roomingListId
-        }
-      }
+      where: {
+        roomingListBooking: {
+          roomingListId,
+        },
+      },
     });
 
     const bookings: Booking[] = result.map(
@@ -101,10 +107,10 @@ export class BookingsRepository implements IBookingsRepository {
         bookingId,
         roomingListId,
       },
-      relations:['roomingList','booking'],
-      select:['booking','roomingList']
+      relations: ['roomingList', 'booking'],
+      select: ['booking', 'roomingList'],
     });
-    
+
     if (!result) return null;
 
     const { booking, roomingList } = result;

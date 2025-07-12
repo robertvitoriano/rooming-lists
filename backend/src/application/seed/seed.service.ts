@@ -1,6 +1,4 @@
-import { Inject } from '@nestjs/common';
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
+import { Injectable } from '@nestjs/common';
 import { IRoomingListAgreementType, RoomingListAgreementType } from 'src/core/entities/value-objects/rooming-list-agreement-type';
 import { IRoomingListStatus } from 'src/core/entities/value-objects/rooming-list-status';
 import { BookingData, BookingRoomingListRelationData, CreateBookingsUseCase } from 'src/core/use-cases/create-bookings';
@@ -20,10 +18,9 @@ export interface RoomingListItem {
   status: IRoomingListStatus;
   agreement_type: IRoomingListAgreementType;
 }
-
+@Injectable()
 export class SeedService {
   constructor(
-    @Inject(CreateEventsAndRoomingListsUseCase)
     private readonly createRoomingListsAndEventsUseCase: CreateEventsAndRoomingListsUseCase,
     private readonly createBookingsUseCase: CreateBookingsUseCase,
     private readonly fileReaderService:FileReaderService
@@ -38,6 +35,7 @@ export class SeedService {
         agreementType: agreement_type,
       }),
     );
+    
     await this.createRoomingListsAndEventsUseCase.execute({
       eventRoomingLists,
     });

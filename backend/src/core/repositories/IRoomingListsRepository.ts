@@ -9,4 +9,6 @@ export interface IRoomingListsRepository {
   findManyById(ids: string[]): Promise<RoomingList[]>;
   delete(): Promise<void>;
   update(): Promise<void>;
+  deleteAll():Promise<void>
+
 }

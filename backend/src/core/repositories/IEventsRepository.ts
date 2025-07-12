@@ -26,4 +26,5 @@ export interface IEventsRepository {
     eventsWithRoomingLists: EventWithRoomingLists[];
     total: number;
   }>;
+  deleteAll():Promise<void>
 }

@@ -1,7 +1,10 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { RoomingListModel } from '../models/rooming-list.model';
-import { IRoomingListsRepository, RoomingListFilteringOptions } from 'src/core/repositories/IRoomingListsRepository';
+import {
+  IRoomingListsRepository,
+  RoomingListFilteringOptions,
+} from 'src/core/repositories/IRoomingListsRepository';
 import { RoomingList } from 'src/core/entities/rooming-list';
 import { PaginationParams, Sorting } from 'src/core/repositories/types';
 
@@ -18,20 +21,35 @@ export class RoomingListsRepository implements IRoomingListsRepository {
     paginationParams: PaginationParams,
     filters?: RoomingListFilteringOptions,
   ): Promise<{ roomingLists: RoomingList[]; total: number }> {
-    
     const { page, perPage, sort } = paginationParams;
-
     const skip = (page - 1) * perPage;
     const take = perPage;
 
+    const query = this.roomingListsRepository
+      .createQueryBuilder('roomingList')
+      .where('roomingList.eventId = :eventId', { eventId });
 
-    const [roomingLists, total] =
-      await this.roomingListsRepository.findAndCount({
-        where: { eventId },
-        skip,
-        take,
-        order: { cutOffDate: sort },
+    if (filters?.rfpName) {
+      query.andWhere('roomingList.rfpName ILIKE :rfpName', {
+        rfpName: `%${filters.rfpName}%`,
       });
+    }
+
+    if (filters?.status) {
+      query.andWhere('roomingList.status = :status', { status: filters.status });
+    }
+
+    if (filters?.aggrementType) {
+      query.andWhere('roomingList.agreementType = :aggrementType', {
+        aggrementType: filters.aggrementType,
+      });
+    }
+
+    const [roomingLists, total] = await query
+      .orderBy('roomingList.cutOffDate', sort)
+      .skip(skip)
+      .take(take)
+      .getManyAndCount();
 
     return {
       total,

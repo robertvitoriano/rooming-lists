@@ -25,7 +25,7 @@ export class EventsController {
   async fetchEventsWithRoomingLists(
     @Query() query: FetchRoomingListsQueryDto,
     @Query('page') page = 1,
-    @Query('perPage') perPage = 3,
+    @Query('perPage') perPage = 10,
   ): Promise<ControllerResponse<EventWithRoomingListResponseData[]>> {
     const { status, eventName } = query;
     const { eventsWithRoomingLists, total } =
@@ -85,7 +85,7 @@ export class EventsController {
   async fetchRoomingListsByEventId(
     @Param('eventId') eventId: string,
     @Query('page') page = 1,
-    @Query('perPage') perPage = 10,
+    @Query('perPage') perPage = 3,
   ): Promise<ControllerResponse<RoomingListResponseData[]>> {
     const { roomingLists, total } =
       await this.fetchRoomingListsByEventUseCase.execute({

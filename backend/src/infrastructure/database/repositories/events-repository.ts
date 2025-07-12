@@ -17,24 +17,19 @@ export class EventsRepository implements IEventsRepository {
     private readonly dataSource: DataSource,
   ) {}
   async deleteAll(): Promise<void> {
-    await this.eventsRepository.deleteAll()
+    await this.eventsRepository.deleteAll();
   }
   async findById(eventId: string): Promise<Event | null> {
     const eventResult = await this.eventsRepository.findOne({
-      where:{
-        id:eventId
-      }
+      where: {
+        id: eventId,
+      },
     });
-    if(!eventResult) return null
-    const {
-      createdAt,
-      updatedAt,
-      id,
-      name,
-    } = eventResult
-    const event= new Event({ name }, { id, createdAt })
-    
-    return event
+    if (!eventResult) return null;
+    const { createdAt, updatedAt, id, name } = eventResult;
+    const event = new Event({ name }, { id, createdAt });
+
+    return event;
   }
 
   async listWithRoomingLists(
@@ -45,6 +40,8 @@ export class EventsRepository implements IEventsRepository {
     total: number;
   }> {
     const { page, perPage } = paginationParams;
+    const skip = (page - 1) * perPage;
+
     const baseQuery = this.dataSource
       .getRepository(EventModel)
       .createQueryBuilder('event')
@@ -59,7 +56,6 @@ export class EventsRepository implements IEventsRepository {
       baseQuery.andWhere('event.name ILIKE :eventName', {
         eventName: `%${filters.eventName}%`,
       });
-
       countQuery.andWhere('event.name ILIKE :eventName', {
         eventName: `%${filters.eventName}%`,
       });
@@ -69,13 +65,14 @@ export class EventsRepository implements IEventsRepository {
       baseQuery.andWhere('roomingList.status = :status', {
         status: filters.status,
       });
-
       countQuery
         .leftJoin('event.roomingLists', 'roomingList')
         .andWhere('roomingList.status = :status', {
           status: filters.status,
         });
     }
+
+    baseQuery.skip(skip).take(perPage).orderBy('event.createdAt', 'DESC');
 
     const [result, total] = await Promise.all([
       baseQuery.getMany(),

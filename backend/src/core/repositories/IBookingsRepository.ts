@@ -18,4 +18,5 @@ export interface IBookingsRepository {
   ): Promise<BookingWithRoomingList | null>;
   list(): Promise<Booking[]>;
   createRoomingListBooking(roomingListBookingRelationsIds:RoomingListBookingRelationIds):Promise<void>
+  listByRoomingListId(roomingListId: string): Promise<Booking[]>;
 }

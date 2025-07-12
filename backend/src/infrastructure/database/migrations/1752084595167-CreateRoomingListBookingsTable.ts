@@ -1,9 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm";
+import {
+  MigrationInterface,
+  QueryRunner,
+  Table,
+  TableForeignKey,
+} from 'typeorm';
 
-export class CreateRoomingListBookingsTable1752084595167 implements MigrationInterface {
-    name = 'CreateRoomingListBookingsTable1752084595167'
+export class CreateRoomingListBookingsTable1752084595167
+  implements MigrationInterface
+{
+  name = 'CreateRoomingListBookingsTable1752084595167';
 
-public async up(queryRunner: QueryRunner): Promise<void> {
+  public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
 
     await queryRunner.createTable(
@@ -39,6 +46,12 @@ public async up(queryRunner: QueryRunner): Promise<void> {
             default: 'CURRENT_TIMESTAMP',
           },
         ],
+        uniques: [
+          {
+            name: 'UNIQUE_rooming_list_booking',
+            columnNames: ['rooming_list_id', 'booking_id'],
+          },
+        ],
       }),
       true,
     );
@@ -67,5 +80,4 @@ public async up(queryRunner: QueryRunner): Promise<void> {
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropTable('rooming_list_bookings');
   }
-
 }

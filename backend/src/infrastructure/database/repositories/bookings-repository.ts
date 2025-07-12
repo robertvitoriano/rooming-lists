@@ -17,6 +17,37 @@ export class BookingsRepository implements IBookingsRepository {
     @InjectRepository(RoomingListBookingModel)
     private roomingListBookingRepository: Repository<RoomingListBookingModel>,
   ) {}
+  async listByRoomingListId(roomingListId: string): Promise<Booking[]> {
+    const result = await this.bookingsRepository.find({
+      where:{
+        roomingListBooking:{
+          roomingListId
+        }
+      }
+    });
+
+    const bookings: Booking[] = result.map(
+      ({
+        checkInDate,
+        checkOutDate,
+        guestName,
+        guestPhoneNumber,
+        createdAt,
+        id,
+        updatedAt,
+      }) =>
+        new Booking(
+          {
+            checkInDate,
+            checkOutDate,
+            guestName,
+            guestPhoneNumber,
+          },
+          { id, createdAt, updatedAt },
+        ),
+    );
+    return bookings;
+  }
 
   async createRoomingListBooking({
     bookingId,
@@ -26,8 +57,8 @@ export class BookingsRepository implements IBookingsRepository {
       bookingId,
       roomingListId,
     });
-    
-    await this.roomingListBookingRepository.save(roomingListBookingRecord)
+
+    await this.roomingListBookingRepository.save(roomingListBookingRecord);
   }
 
   async findById(id: string): Promise<Booking | null> {
@@ -74,9 +105,9 @@ export class BookingsRepository implements IBookingsRepository {
     });
 
     if (!result) return null;
-    
+
     const { booking, roomingList } = result;
-    
+
     if (!booking || !roomingList) return null;
 
     const {
@@ -139,7 +170,7 @@ export class BookingsRepository implements IBookingsRepository {
   async list(): Promise<Booking[]> {
     const result = await this.bookingsRepository.find();
 
-    const rommingLists: Booking[] = result.map(
+    const bookings: Booking[] = result.map(
       ({
         checkInDate,
         checkOutDate,
@@ -159,7 +190,7 @@ export class BookingsRepository implements IBookingsRepository {
           { id, createdAt, updatedAt },
         ),
     );
-    return rommingLists;
+    return bookings;
   }
   async create({
     checkInDate,

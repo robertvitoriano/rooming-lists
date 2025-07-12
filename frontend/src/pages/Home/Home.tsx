@@ -20,7 +20,7 @@ export function Home() {
             <img src={searcIcon} />
             <Input placeholder="Search" className="border-none bg-white  rounded-xl" />
           </div>
-          <PopOverWrapper content={<RoomingListsFilter checkedColor={"#00C2A6"} />}>
+          <PopOverWrapper content={(close)=><RoomingListsFilter checkedColor={"#00C2A6"} onSave={close}/>}>
             <div className="flex justify-center items-center border b-border bg-white rounded px-6 py-2 gap-2">
               <span className="text-black">Filters</span>
               <img src={filtersIcon} />

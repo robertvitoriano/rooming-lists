@@ -8,9 +8,10 @@ const items = [
   { id: "canceled", label: "Canceled" },
 ]
 type Props = {
-  checkedColor:string
+  checkedColor:string,
+  onSave: () => void
 }
-export default function RoomingListsFilter({checkedColor}:Props) {
+export default function RoomingListsFilter({checkedColor, onSave}:Props) {
   const [selected, setSelected] = useState<string[]>(["closed"])
 
   const toggle = (id: string) => {
@@ -20,7 +21,7 @@ export default function RoomingListsFilter({checkedColor}:Props) {
   }
 
   const handleSubmit = () => {
-    alert(`Selected: ${JSON.stringify(selected)}`)
+    onSave()
   }
 
   return (

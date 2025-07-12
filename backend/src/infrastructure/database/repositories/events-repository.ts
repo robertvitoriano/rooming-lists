@@ -9,7 +9,7 @@ import {
   RoomingListFilteringOptions,
 } from 'src/core/repositories/IEventsRepository';
 import { RoomingList } from 'src/core/entities/rooming-list';
-import { PaginationParams } from 'src/core/repositories/pagination-params';
+import { PaginationParams, Sorting } from 'src/core/repositories/types';
 export class EventsRepository implements IEventsRepository {
   constructor(
     @InjectRepository(EventModel)
@@ -39,7 +39,7 @@ export class EventsRepository implements IEventsRepository {
     eventsWithRoomingLists: EventWithRoomingLists[];
     total: number;
   }> {
-    const { page, perPage } = paginationParams;
+    const { page, perPage, sort } = paginationParams;
     const skip = (page - 1) * perPage;
     const ROOMING_LISTS_COUNT = 3;
 
@@ -73,7 +73,7 @@ export class EventsRepository implements IEventsRepository {
         });
     }
 
-    baseQuery.skip(skip).take(perPage).orderBy('event.createdAt', 'DESC');
+    baseQuery.skip(skip).take(perPage).orderBy('event.createdAt', sort);
 
     const [result, total] = await Promise.all([
       baseQuery.getMany(),
@@ -85,7 +85,7 @@ export class EventsRepository implements IEventsRepository {
         id,
         name,
         roomingLists: roomingLists
-          .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+          .sort((a, b) => b.cutOffDate.getTime() - a.cutOffDate.getTime())
           .slice(0, ROOMING_LISTS_COUNT)
           .map(
             ({

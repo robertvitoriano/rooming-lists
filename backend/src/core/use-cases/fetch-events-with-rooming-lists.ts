@@ -3,7 +3,7 @@ import {
   EventWithRoomingLists,
   IEventsRepository,
 } from '../repositories/IEventsRepository';
-import { PaginationParams } from '../repositories/pagination-params';
+import { PaginationParams } from '../repositories/types';
 
 interface FetchEventsWithRoomingListsRequest extends PaginationParams {
   status?: IRoomingListStatus;
@@ -19,12 +19,13 @@ export class FetchEventsWithRoomingListsUseCase {
   async execute(
     params: FetchEventsWithRoomingListsRequest,
   ): Promise<FetchEventsWithRoomingListsResponse> {
-    const { status, eventName, page, perPage } = params;
+    const { status, eventName, page, perPage, sort } = params;
     const { eventsWithRoomingLists, total } =
       await this.eventslistRepository.listWithRoomingLists(
         {
           page,
           perPage,
+          sort,
         },
         {
           status,

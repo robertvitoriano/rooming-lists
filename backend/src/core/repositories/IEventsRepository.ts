@@ -1,7 +1,7 @@
 import { Event } from '../entities/event';
 import { RoomingList } from '../entities/rooming-list';
 import { IRoomingListStatus } from '../entities/value-objects/rooming-list-status';
-import { PaginationParams } from './pagination-params';
+import { PaginationParams } from './types';
 
 export interface EventWithRoomingLists {
   id: string;

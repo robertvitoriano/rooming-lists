@@ -13,6 +13,7 @@ import {
   RoomingListResponseData,
 } from '../types/events-with-rooming-lists';
 import { FetchRoomingListsByEventUseCase } from 'src/core/use-cases/fetch-rooming-list-by-event';
+import { Sorting } from 'src/core/repositories/types';
 
 @Controller('/events')
 export class EventsController {
@@ -26,6 +27,7 @@ export class EventsController {
     @Query() query: FetchRoomingListsQueryDto,
     @Query('page') page = 1,
     @Query('perPage') perPage = 10,
+    @Query('sort') sort: Sorting,
   ): Promise<ControllerResponse<EventWithRoomingListResponseData[]>> {
     const { status, eventName } = query;
     const { eventsWithRoomingLists, total } =
@@ -34,6 +36,7 @@ export class EventsController {
         eventName,
         page,
         perPage,
+        sort: sort.toUpperCase() as Sorting,
       });
 
     const data = eventsWithRoomingLists.map(({ id, name, roomingLists }) => ({
@@ -72,7 +75,7 @@ export class EventsController {
         total,
         pagination: {
           currentPage: Number(page),
-          perPage:Number(perPage),
+          perPage: Number(perPage),
           currentPageTotal: eventsWithRoomingLists.length,
           totalPages: Math.ceil(total / perPage),
         },
@@ -86,12 +89,14 @@ export class EventsController {
     @Param('eventId') eventId: string,
     @Query('page') page = 1,
     @Query('perPage') perPage = 3,
+    @Query('sort') sort: Sorting = 'DESC',
   ): Promise<ControllerResponse<RoomingListResponseData[]>> {
     const { roomingLists, total } =
       await this.fetchRoomingListsByEventUseCase.execute({
         eventId,
         page,
         perPage,
+        sort:sort.toUpperCase() as Sorting,
       });
 
     return {
@@ -99,7 +104,7 @@ export class EventsController {
         total,
         pagination: {
           currentPage: Number(page),
-          perPage:Number(perPage),
+          perPage: Number(perPage),
           currentPageTotal: roomingLists.length,
           totalPages: Math.ceil(total / perPage),
         },

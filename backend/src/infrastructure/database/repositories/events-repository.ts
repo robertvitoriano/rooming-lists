@@ -1,5 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 
 import { EventModel } from '../models/event.model';
 import { Event } from 'src/core/entities/event';
@@ -13,59 +13,62 @@ export class EventsRepository implements IEventsRepository {
   constructor(
     @InjectRepository(EventModel)
     private eventsRepository: Repository<EventModel>,
+    private readonly dataSource: DataSource,
   ) {}
 
-async listWithRoomingLists(
-  filters?: RoomingListFilteringOptions,
-): Promise<EventWithRoomingLists[]> {
-  const where: any = {};
+  async listWithRoomingLists(
+    filters?: RoomingListFilteringOptions,
+  ): Promise<EventWithRoomingLists[]> {
+    const query = this.dataSource
+      .getRepository(EventModel)
+      .createQueryBuilder('event')
+      .leftJoinAndSelect('event.roomingLists', 'roomingList')
+      .leftJoinAndSelect('roomingList.roomingListBookings', 'booking');
 
-  if (filters?.eventName) {
-    where.name = filters.eventName;
+    if (filters?.eventName) {
+      query.andWhere('event.name ILIKE :eventName', {
+        eventName: `%${filters.eventName}%`,
+      });
+    }
+
+    if (filters?.status) {
+      query.andWhere('roomingList.status = :status', {
+        status: filters.status,
+      });
+    }
+
+    const result = await query.getMany();
+
+    return result.map(({ id, name, roomingLists }) => ({
+      id,
+      name,
+      roomingLists: roomingLists.map(
+        ({
+          agreementType,
+          cutOffDate,
+          eventId,
+          hotelId,
+          id,
+          rfpName,
+          status,
+          createdAt,
+          roomingListBookings,
+        }) =>
+          new RoomingList(
+            {
+              eventId,
+              hotelId,
+              rfpName,
+              agreementType,
+              cutOffDate,
+              status,
+            },
+            { id, createdAt },
+            { bookingsCount: roomingListBookings?.length ?? 0 },
+          ),
+      ),
+    }));
   }
-
-  if (filters?.status) {
-    where.roomingLists = { status: filters.status };
-  }
-
-  const result = await this.eventsRepository.find({
-    select: ['id', 'name', 'roomingLists'],
-    relations: ['roomingLists', 'roomingLists.roomingListBookings'],
-    where,
-  });
-
-  const events = result.map(({ id, name, roomingLists }) => ({
-    id,
-    name,
-    roomingLists: roomingLists.map(
-      ({
-        agreementType,
-        cutOffDate,
-        eventId,
-        hotelId,
-        id,
-        rfpName,
-        status,
-        createdAt,
-        roomingListBookings,
-      }) =>
-        new RoomingList(
-          {
-            eventId,
-            hotelId,
-            rfpName,
-            agreementType,
-            cutOffDate,
-            status,
-          },
-          { id, createdAt },
-          { bookingsCount: roomingListBookings?.length },
-        ),
-    ),
-  }));
-
-  return events;
-}
 
   async list(): Promise<Event[]> {
     const result = await this.eventsRepository.find();

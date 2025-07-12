@@ -1,16 +1,15 @@
 import { Input } from "@/components/ui/input";
 import searcIcon from "../../assets/search-icon.png";
 import filtersIcon from "../../assets/filters-icon.png";
-
-
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { EventCard } from "@/components/event-card";
+import { EventRow } from "@/components/event-row";
 
 export function Home() {
-  const [events, setEvents] = useState([2]);
+  const [events, setEvents] = useState([2,2,4,5]);
+
   return (
-    <div>
+    <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-6">
         <div className="flex flex-col bg-background text-black">
           <span className="text-[32px]">Rooming List Management: Events</span>
@@ -27,14 +26,7 @@ export function Home() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-4">
-        <div className="flex gap-4 overflow-auto">
-          
-          {events.map(() => (
-              <EventCard/>
-          ))}
-        </div>
-      </div>
+        {events.map(()=><EventRow roomingLists={[2,3,54,153,5]}  />)}
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { FetchRoomingListsUseCase } from 'src/core/use-cases/fetch-rooming-lists
 import { ControllerResponse } from '../types/controller-response';
 import { FetchBookingsByRoomingListUseCase } from 'src/core/use-cases/fetch-bookings-by-rooming-list';
 import { BookingResponseData } from '../types/booking';
+import { RoomingListResponseData } from '../types/events-with-rooming-lists';
 
 @Controller('/rooming-lists')
 export class RoomingListsController {
@@ -12,31 +13,39 @@ export class RoomingListsController {
   ) {}
 
   @Get('/')
-  async fetchRoomingLists() {
+  async fetchRoomingLists(): Promise<
+    ControllerResponse<RoomingListResponseData[]>
+  > {
     const { roomingLists } = await this.fetchRoomingListsUseCase.execute({});
-    return roomingLists.map(
-      ({
-        agreementType,
-        createdAt,
-        cutOffDate,
-        eventId,
-        hotelId,
-        id,
-        rfpName,
-        status,
-        updatedAt,
-      }) => ({
-        id: id.toValue(),
-        agreementType,
-        createdAt,
-        cutOffDate,
-        eventId,
-        hotelId,
-        rfpName,
-        status,
-        updatedAt,
-      }),
-    );
+    return {
+      message: 'Rooming lists fetched success fully',
+      meta: {
+        total: roomingLists.length,
+      },
+      data: roomingLists.map(
+        ({
+          agreementType,
+          createdAt,
+          cutOffDate,
+          eventId,
+          hotelId,
+          id,
+          rfpName,
+          status,
+          updatedAt,
+        }) => ({
+          id: id.toValue(),
+          agreementType,
+          createdAt,
+          cutOffDate,
+          eventId,
+          hotelId,
+          rfpName,
+          status,
+          updatedAt,
+        }),
+      ),
+    };
   }
 
   @Get('/:id/bookings')

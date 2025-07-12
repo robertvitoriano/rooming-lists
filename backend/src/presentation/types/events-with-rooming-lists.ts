@@ -17,5 +17,5 @@ export type RoomingListResponseData = {
   rfpName: string;
   status:  IRoomingListStatus;
   updatedAt: Date;
-  bookingsCount: number;
+  bookingsCount?: number;
 };

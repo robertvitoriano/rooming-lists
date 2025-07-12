@@ -49,9 +49,8 @@ describe('FetchRoomingListsUseCase', () => {
   });
 
   it('Should be able to list created RoomingLists', async () => {
-    
     const event = new Event({ name: 'Incredible event' }, { id: '1' });
-    
+
     const roomingList = new RoomingList({
       agreementType: 'artist',
       cutOffDate: new Date(),
@@ -67,5 +66,28 @@ describe('FetchRoomingListsUseCase', () => {
     const { roomingLists } = await sut.execute({});
 
     expect(roomingLists.length).toBe(1);
+  });
+
+  it('Should be able to delete all created rooming lists', async () => {
+    const event = new Event({ name: 'Incredible event' }, { id: '1' });
+
+    const roomingList = new RoomingList({
+      agreementType: 'artist',
+      cutOffDate: new Date(),
+      eventId: event.id.toValue(),
+      hotelId: '1',
+      rfpName: 'ASDSA',
+      status: 'active',
+    });
+
+    await eventsRepository.create(event);
+    await roomingListsRepository.create(roomingList);
+    
+    await eventsRepository.deleteAll()
+    await roomingListsRepository.deleteAll()
+
+    const { roomingLists } = await sut.execute({});
+
+    expect(roomingLists.length).toBe(0);
   });
 });

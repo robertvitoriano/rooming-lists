@@ -24,6 +24,7 @@ import {
   roomingListsRepository,
   truncateDatabaseUseCase,
 } from './providers';
+import { SeedController } from './controllers/seed-controller';
 
 @Module({
   imports: [
@@ -51,6 +52,11 @@ import {
     SeedService,
     FileReaderService,
   ],
-  controllers: [RoomingListsController, BookingsController, EventsController],
+  controllers: [
+    RoomingListsController,
+    BookingsController,
+    EventsController,
+    SeedController,
+  ],
 })
 export class AppModule {}

@@ -107,9 +107,9 @@ export const createBookings = {
 
 export const truncateDatabaseUseCase = {
   inject: [
-    'IEventsRepository',
-    'IRoomingListsRepository',
     'IBookingsRepository',
+    'IRoomingListsRepository',
+    'IEventsRepository',
   ],
   provide: TruncateDatabaseUseCase,
   useFactory: (

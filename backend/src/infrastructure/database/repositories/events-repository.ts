@@ -6,6 +6,7 @@ import { Event } from 'src/core/entities/event';
 import {
   EventWithRoomingLists,
   IEventsRepository,
+  RoomingListFilteringOptions,
 } from 'src/core/repositories/IEventsRepository';
 import { RoomingList } from 'src/core/entities/rooming-list';
 export class EventsRepository implements IEventsRepository {
@@ -13,10 +14,24 @@ export class EventsRepository implements IEventsRepository {
     @InjectRepository(EventModel)
     private eventsRepository: Repository<EventModel>,
   ) {}
-  async listWithRoomingLists(): Promise<EventWithRoomingLists[]> {
+
+  async listWithRoomingLists(
+    filters?: RoomingListFilteringOptions,
+  ): Promise<EventWithRoomingLists[]> {
+    
+    const whereClause =
+      Object.keys(filters || {}).length > 0
+        ? {
+            roomingLists: {
+              ...filters,
+            },
+          }
+        : {};
+        
     const result = await this.eventsRepository.find({
-      select: ['id', 'name', 'roomingLists', ],
+      select: ['id', 'name', 'roomingLists'],
       relations: ['roomingLists', 'roomingLists.roomingListBookings'],
+      where: whereClause,
     });
 
     const events = result.map(({ id, name, roomingLists }) => ({

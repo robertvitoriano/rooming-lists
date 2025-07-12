@@ -1,10 +1,15 @@
 import {
+  IRoomingListStatus,
+  RoomingListStatus,
+} from '../entities/value-objects/rooming-list-status';
+import {
   EventWithRoomingLists,
   IEventsRepository,
 } from '../repositories/IEventsRepository';
 
-interface FetchEventsWithRoomingListsRequest {}
-
+interface FetchEventsWithRoomingListsRequest {
+  status?: IRoomingListStatus;
+}
 export interface FetchEventsWithRoomingListsResponse {
   eventsWithRoomingLists: EventWithRoomingLists[];
 }
@@ -15,7 +20,9 @@ export class FetchEventsWithRoomingListsUseCase {
     params: FetchEventsWithRoomingListsRequest,
   ): Promise<FetchEventsWithRoomingListsResponse> {
     const eventsWithRoomingLists =
-      await this.eventslistRepository.listWithRoomingLists();
+      await this.eventslistRepository.listWithRoomingLists({
+        status: params.status,
+      });
 
     return { eventsWithRoomingLists };
   }

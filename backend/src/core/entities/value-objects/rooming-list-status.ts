@@ -12,7 +12,7 @@ export class RoomingListStatus {
     return new RoomingListStatus(status as IRoomingListStatus);
   }
 
-  public toValue(): string {
+  public toValue(): IRoomingListStatus {
     return this.value;
   }
 

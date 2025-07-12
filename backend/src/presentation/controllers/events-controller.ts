@@ -1,5 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { FetchEventsWithRoomingListsUseCase } from 'src/core/use-cases/fetch-events-with-rooming-lists';
+import { FetchRoomingListsQueryDto, roomingListsStatusMap } from '../dto/fetch-events-with-rooming-lists.dto';
 
 @Controller('/events')
 export class EventsController {
@@ -8,9 +9,15 @@ export class EventsController {
   ) {}
 
   @Get('with-rooming-lists')
-  async fetchRoomingListsByEvents() {
+  async fetchRoomingListsByEvents(
+    @Query() query: FetchRoomingListsQueryDto,
+  ) {
+    
     const { eventsWithRoomingLists } =
-      await this.fetchEventsWithRoomingListsUseCase.execute({});
+      await this.fetchEventsWithRoomingListsUseCase.execute({
+        status: roomingListsStatusMap[query.status as string],
+      });
+      
     return eventsWithRoomingLists.map(({ id, name, roomingLists }) => ({
       id,
       name,

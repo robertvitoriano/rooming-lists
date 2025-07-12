@@ -2,6 +2,7 @@ import { Booking } from '../entities/booking';
 import { RoomingList } from '../entities/rooming-list';
 
 export interface RoomingListBookingRelationIds {
+  id?:string
   bookingId: string;
   roomingListId: string;
 }

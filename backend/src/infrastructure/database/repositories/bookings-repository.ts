@@ -58,8 +58,10 @@ export class BookingsRepository implements IBookingsRepository {
   async createRoomingListBooking({
     bookingId,
     roomingListId,
+    id
   }: RoomingListBookingRelationIds): Promise<void> {
     const roomingListBookingRecord = this.roomingListBookingRepository.create({
+      id,
       bookingId,
       roomingListId,
     });

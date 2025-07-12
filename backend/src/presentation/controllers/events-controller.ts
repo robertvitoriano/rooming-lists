@@ -71,10 +71,10 @@ export class EventsController {
       meta: {
         total,
         pagination: {
-          currentPage: page,
+          currentPage: Number(page),
+          perPage:Number(perPage),
           currentPageTotal: eventsWithRoomingLists.length,
           totalPages: Math.ceil(total / perPage),
-          perPage,
         },
       },
       message: 'Events fetched successfully',
@@ -98,10 +98,10 @@ export class EventsController {
       meta: {
         total,
         pagination: {
-          currentPage: page,
+          currentPage: Number(page),
+          perPage:Number(perPage),
           currentPageTotal: roomingLists.length,
           totalPages: Math.ceil(total / perPage),
-          perPage,
         },
       },
       message: 'Rooming Lists fetched successfully by event',

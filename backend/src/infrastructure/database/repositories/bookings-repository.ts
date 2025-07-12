@@ -96,14 +96,15 @@ export class BookingsRepository implements IBookingsRepository {
     roomingListBookingRelationIds: RoomingListBookingRelationIds,
   ): Promise<BookingWithRoomingList | null> {
     const { bookingId, roomingListId } = roomingListBookingRelationIds;
-
     const result = await this.roomingListBookingRepository.findOne({
       where: {
         bookingId,
         roomingListId,
       },
+      relations:['roomingList','booking'],
+      select:['booking','roomingList']
     });
-
+    
     if (!result) return null;
 
     const { booking, roomingList } = result;

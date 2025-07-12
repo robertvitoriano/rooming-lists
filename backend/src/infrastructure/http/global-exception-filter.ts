@@ -9,6 +9,7 @@ import {
 import { Response } from 'express';
 import { ErrorCodes } from 'src/core/errors/error-codes';
 import { EventNotFoundError } from 'src/core/errors/event-not-fount-error';
+import { RoomingListNotFoundError } from 'src/core/errors/rooming-list-not-found-error';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
@@ -30,7 +31,15 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       throw new NotFoundException(exception.message);
     }
 
-
+    if (exception instanceof RoomingListNotFoundError) {
+      response.status(HttpStatus.NOT_FOUND).json({
+        statusCode: HttpStatus.NOT_FOUND,
+        code: ErrorCodes.ROOMING_LIST_NOT_FOUND,
+        message: exception.message,
+      });
+      throw new NotFoundException(exception.message);
+    }
+    
     response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
       code: ErrorCodes.INTERNAL_ERROR,

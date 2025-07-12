@@ -6,6 +6,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { ErrorCodes } from 'src/core/errors/error-codes';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {

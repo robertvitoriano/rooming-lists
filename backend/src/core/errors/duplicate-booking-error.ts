@@ -1,4 +1,5 @@
 import { AppError } from "./app-error";
+import { ErrorCodes } from "./error-codes";
 
 export class DuplicateBookingError extends Error implements AppError {
   code = ErrorCodes.DUPLICATE_BOOKING;

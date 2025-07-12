@@ -2,6 +2,7 @@ import { Controller, Get, Param } from '@nestjs/common';
 import { FetchRoomingListsUseCase } from 'src/core/use-cases/fetch-rooming-lists';
 import { ControllerResponse } from '../types/controller-response';
 import { FetchBookingsByRoomingListUseCase } from 'src/core/use-cases/fetch-bookings-by-rooming-list';
+import { BookingResponseData } from '../types/booking';
 
 @Controller('/rooming-lists')
 export class RoomingListsController {
@@ -41,19 +42,33 @@ export class RoomingListsController {
   @Get('/:id/bookings')
   async getBookingsForRoomingList(
     @Param('id') roomingListId: string,
-  ): Promise<ControllerResponse<any>> {
+  ): Promise<ControllerResponse<BookingResponseData[]>> {
     const { bookings } = await this.fetchBookingsByRoomingListUseCase.execute({
       roomingListId,
     });
 
-    const data = bookings.map((booking) => ({
-      ...booking
-    }));
-
     return {
-      data,
+      data: bookings.map(
+        ({
+          checkInDate,
+          checkOutDate,
+          createdAt,
+          guestName,
+          guestPhoneNumber,
+          id,
+          updatedAt,
+        }) => ({
+          id: id.toValue(),
+          checkInDate,
+          checkOutDate,
+          createdAt,
+          guestName,
+          guestPhoneNumber,
+          updatedAt,
+        }),
+      ),
       meta: {
-        total: data.length,
+        total: bookings.length,
       },
       message: 'Bookings fetched successfully',
     };

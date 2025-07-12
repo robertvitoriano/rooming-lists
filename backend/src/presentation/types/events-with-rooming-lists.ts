@@ -1,0 +1,20 @@
+import { IRoomingListStatus } from "src/core/entities/value-objects/rooming-list-status";
+
+export type EventWithRoomingListResponseData = {
+  id: string;
+  name: string;
+  roomingLists: RoomingListResponseData[];
+};
+
+export type RoomingListResponseData = {
+  id: string;
+  agreementType: string;
+  createdAt: Date;
+  cutOffDate: Date;
+  eventId: string;
+  hotelId: string;
+  rfpName: string;
+  status:  IRoomingListStatus;
+  updatedAt: Date;
+  bookingsCount: number;
+};

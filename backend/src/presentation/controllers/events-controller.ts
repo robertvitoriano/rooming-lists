@@ -1,6 +1,14 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { FetchEventsWithRoomingListsUseCase } from 'src/core/use-cases/fetch-events-with-rooming-lists';
-import { FetchRoomingListsQueryDto, roomingListsStatusMap } from '../dto/fetch-events-with-rooming-lists.dto';
+import {
+  FetchEventsWithRoomingListsResponse,
+  FetchEventsWithRoomingListsUseCase,
+} from 'src/core/use-cases/fetch-events-with-rooming-lists';
+import {
+  FetchRoomingListsQueryDto,
+  roomingListsStatusMap,
+} from '../dto/fetch-events-with-rooming-lists.dto';
+import { ControllerResponse } from '../types/controller-response';
+import { EventWithRoomingListResponseData } from '../types/events-with-rooming-lists';
 
 @Controller('/events')
 export class EventsController {
@@ -11,14 +19,13 @@ export class EventsController {
   @Get('with-rooming-lists')
   async fetchRoomingListsByEvents(
     @Query() query: FetchRoomingListsQueryDto,
-  ) {
-    
+  ): Promise<ControllerResponse<EventWithRoomingListResponseData[]>> {
     const { eventsWithRoomingLists } =
       await this.fetchEventsWithRoomingListsUseCase.execute({
         status: roomingListsStatusMap[query.status as string],
       });
-      
-    return eventsWithRoomingLists.map(({ id, name, roomingLists }) => ({
+
+    const data = eventsWithRoomingLists.map(({ id, name, roomingLists }) => ({
       id,
       name,
       roomingLists: roomingLists.map(
@@ -47,5 +54,17 @@ export class EventsController {
         }),
       ),
     }));
+
+    return {
+      data,
+      meta: {
+        totalEvents: data.length,
+        totalRoomingLists: data.reduce(
+          (count, event) => count + event.roomingLists.length,
+          0,
+        ),
+      },
+      message: 'Events with rooming lists fetched successfully',
+    };
   }
 }

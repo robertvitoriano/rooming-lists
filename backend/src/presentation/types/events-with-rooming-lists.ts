@@ -1,3 +1,4 @@
+import { IRoomingListAgreementType } from "src/core/entities/value-objects/rooming-list-agreement-type";
 import { IRoomingListStatus } from "src/core/entities/value-objects/rooming-list-status";
 
 export type EventWithRoomingListResponseData = {
@@ -8,7 +9,7 @@ export type EventWithRoomingListResponseData = {
 
 export type RoomingListResponseData = {
   id: string;
-  agreementType: string;
+  agreementType: IRoomingListAgreementType;
   createdAt: Date;
   cutOffDate: Date;
   eventId: string;

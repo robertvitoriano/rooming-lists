@@ -58,7 +58,7 @@ export const RoomingListCard = ({
             </div>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Dhow Agreement as PDF</p>
+            <p>Show Agreement as PDF</p>
           </TooltipContent>
         </Tooltip>
       </div>

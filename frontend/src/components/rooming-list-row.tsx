@@ -17,9 +17,9 @@ export const RoomingListRow = ({ event, color }: Props) => {
     <div className="flex flex-col gap-4">
       <div className="relative">
         <div className={`w-full border-[0.5px] border-b]`} style={{ borderColor: color }}></div>
-        <div className="px-8 bg-background w-fit absolute -bottom-3 left-1/2 -translate-x-1/2">
+        <div className=" px-2 md:px-8 bg-background w-fit absolute -bottom-3 left-1/2 -translate-x-1/2">
           <div className={`py-1 px-2 w-fit rounded-lg`} style={{ backgroundColor: lightColor }}>
-            <span style={{ color }}>{event?.name}</span>
+            <span className="text-sm md:text-lg" style={{ color }}>{event?.name}</span>
           </div>
         </div>
       </div>

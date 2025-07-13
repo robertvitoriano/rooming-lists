@@ -28,9 +28,9 @@ export function Home() {
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-6">
         <div className="flex flex-col bg-background text-black">
-          <span className="text-[32px]">Rooming List Management: Events</span>
+          <span className="text-sm md:text-[32px]">Rooming List Management: Events</span>
         </div>
-        <div className="flex gap-4">
+        <div className="flex flex-col md:flex-row gap-4">
           <div className="flex relative border b-border bg-white rounded-xl h-fit">
             <img src={searcIcon} />
             <Input placeholder="Search" className="border-none bg-white  rounded-xl" />

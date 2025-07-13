@@ -7,6 +7,8 @@ import {
 } from 'src/core/repositories/IRoomingListsRepository';
 import { RoomingList } from 'src/core/entities/rooming-list';
 import { PaginationParams, Sorting } from 'src/core/repositories/types';
+import { RoomingListsWithBookings } from 'src/core/repositories/IEventsRepository';
+import { Booking } from 'src/core/entities/booking';
 
 export class RoomingListsRepository implements IRoomingListsRepository {
   constructor(
@@ -20,23 +22,54 @@ export class RoomingListsRepository implements IRoomingListsRepository {
     eventId: string,
     paginationParams: PaginationParams,
     filters?: RoomingListFilteringOptions,
-  ): Promise<{ roomingLists: RoomingList[]; total: number }> {
+  ): Promise<{
+    roomingListsWithBookings: RoomingListsWithBookings[];
+    total: number;
+  }> {
     const { page, perPage, sort } = paginationParams;
     const skip = (page - 1) * perPage;
     const take = perPage;
 
     const query = this.roomingListsRepository
       .createQueryBuilder('roomingList')
+      .leftJoinAndSelect(
+        'roomingList.roomingListBookings',
+        'roomingListBooking',
+      )
+      .leftJoinAndSelect('roomingListBooking.booking', 'booking')
       .where('roomingList.eventId = :eventId', { eventId });
+
+    if (filters?.search) {
+      query
+        .andWhere('roomingList.rfp_name ILIKE :search', {
+          search: `%${filters.search}%`,
+        })
+        .orWhere('roomingList.agreement_type ILIKE :search', {
+          search: `%${filters.search}%`,
+        })
+        .orWhere('event.name ILIKE :search', {
+          search: `%${filters.search}%`,
+        });
+    }
+
+    const status = filters?.status;
+
+    if (status && status.length > 0) {
+      query.andWhere('roomingList.status IN (:...status)', {
+        status,
+      });
+
+      query
+        .leftJoin('event.roomingLists', 'roomingList')
+        .andWhere('roomingList.status IN (:...status)', {
+          status,
+        });
+    }
 
     if (filters?.rfpName) {
       query.andWhere('roomingList.rfpName ILIKE :rfpName', {
         rfpName: `%${filters.rfpName}%`,
       });
-    }
-
-    if (filters?.status) {
-      query.andWhere('roomingList.status = :status', { status: filters.status });
     }
 
     if (filters?.agreementType) {
@@ -53,7 +86,7 @@ export class RoomingListsRepository implements IRoomingListsRepository {
 
     return {
       total,
-      roomingLists: roomingLists.map(
+      roomingListsWithBookings: roomingLists.map(
         ({
           id,
           agreementType,
@@ -64,8 +97,9 @@ export class RoomingListsRepository implements IRoomingListsRepository {
           rfpName,
           status,
           updatedAt,
-        }) =>
-          new RoomingList(
+          roomingListBookings,
+        }) => ({
+          roomingList: new RoomingList(
             {
               agreementType,
               cutOffDate,
@@ -76,6 +110,33 @@ export class RoomingListsRepository implements IRoomingListsRepository {
             },
             { id, createdAt, updatedAt },
           ),
+          bookings: roomingListBookings.map(
+            ({
+              booking: {
+                checkInDate,
+                checkOutDate,
+                createdAt,
+                guestName,
+                guestPhoneNumber,
+                id,
+                updatedAt,
+              },
+            }) =>
+              new Booking(
+                {
+                  checkInDate,
+                  checkOutDate,
+                  guestName,
+                  guestPhoneNumber,
+                },
+                {
+                  createdAt,
+                  updatedAt,
+                  id,
+                },
+              ),
+          ),
+        }),
       ),
     };
   }

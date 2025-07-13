@@ -38,7 +38,7 @@ export class FetchRoomingListsByEventUseCase {
 
     if (!event) throw new EventNotFoundError(eventId);
 
-    const { roomingLists, total } =
+    const { roomingListsWithBookings, total } =
       await this.roominglistRepository.findManyByEventId(
         eventId,
         {
@@ -53,6 +53,12 @@ export class FetchRoomingListsByEventUseCase {
           status,
         },
       );
+    const roomingLists = roomingListsWithBookings.map(
+      ({ bookings, roomingList }) => {
+        roomingList.setStartAndEndDateBasedOnBookings(bookings);
+        return roomingList;
+      },
+    );
 
     return { roomingLists, total };
   }

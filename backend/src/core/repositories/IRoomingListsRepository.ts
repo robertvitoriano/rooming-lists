@@ -1,19 +1,23 @@
 import { RoomingList } from '../entities/rooming-list';
 import { IRoomingListAgreementType } from '../entities/value-objects/rooming-list-agreement-type';
+import { RoomingListsWithBookings } from './IEventsRepository';
 import { PaginationParams } from './types';
 export type RoomingListFilteringOptions = {
-  status?: string[]
+  status?: string[];
   eventName?: string;
   rfpName?: string;
   agreementType?: IRoomingListAgreementType;
-  search?:string
+  search?: string;
 };
 export interface IRoomingListsRepository {
   findManyByEventId(
     eventId: string,
     paginationParams: PaginationParams,
     filters: RoomingListFilteringOptions,
-  ): Promise<{ roomingLists: RoomingList[]; total: number }>;
+  ): Promise<{
+    roomingListsWithBookings: RoomingListsWithBookings[];
+    total: number;
+  }>;
   findById(roomingListId: string): unknown;
   create(roomingLit: RoomingList): Promise<void>;
   list(): Promise<RoomingList[]>;

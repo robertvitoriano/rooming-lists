@@ -146,6 +146,8 @@ export class EventsController {
         status: roomingList.status,
         updatedAt: roomingList.updatedAt,
         bookingsCount: roomingList.bookingsCount,
+        startDate: roomingList.startDate,
+        endDate: roomingList.endDate,
       })),
     };
   }

@@ -103,9 +103,6 @@ export class EventsRepository implements IEventsRepository {
         .orWhere('roomingList.agreement_type ILIKE :search', {
           search: `%${filters.search}%`,
         })
-        .orWhere('roomingList.rfp_name ILIKE :search', {
-          search: `%${filters.search}%`,
-        })
         .orWhere('event.name ILIKE :search', {
           search: `%${filters.search}%`,
         });
@@ -116,9 +113,6 @@ export class EventsRepository implements IEventsRepository {
           search: `%${filters.search}%`,
         })
         .orWhere('roomingList.agreement_type ILIKE :search', {
-          search: `%${filters.search}%`,
-        })
-        .orWhere('roomingList.rfp_name ILIKE :search', {
           search: `%${filters.search}%`,
         })
         .orWhere('event.name ILIKE :search', {

@@ -27,6 +27,7 @@ export function Home() {
       {
         search: filteredSearch,
         status: filteredStatus,
+        sort:'DESC'
       }
     );
 

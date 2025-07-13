@@ -29,8 +29,6 @@ const [cutOffDateSort, setCutOffDateSort] = useState<string>("DESC");
     }
   };
 
-
-
   return (
     <div className="flex flex-col gap-4">
       <div className="relative">
@@ -58,7 +56,7 @@ const [cutOffDateSort, setCutOffDateSort] = useState<string>("DESC");
         </div>
       </PopOverWrapper>
       <div className="flex gap-4 overflow-x-auto whitespace-nowrap pb-2">
-        {roomingLists.map((roomingList, i) => (
+        {roomingLists.map((roomingList,) => (
           <div key={roomingList.id} className="flex-shrink-0">
             <RoomingListCard roomingList={roomingList} key={roomingList.id} />
           </div>

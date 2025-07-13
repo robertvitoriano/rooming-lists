@@ -25,6 +25,7 @@ export type RoomingList = {
 export type EventFilters = {
   search: string
   status: string[]
+  sort: string
 }
 
 export async function fetchEvents(

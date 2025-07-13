@@ -2,13 +2,13 @@ import { EventCard } from "./event-card";
 
 type Props = {
   event: {
-    roomingLists: any[];
+    roomingLists: Array<{ bookingsCount: number; cutOffDate: string }>;
     name: string;
   };
 };
-export const EventRow = ({event}: Props) => {
+export const EventRow = ({ event }: Props) => {
   return (
-  <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4">
       <div className="relative">
         <div className="w-full border-b border-[#00C2A6]"></div>
         <div className="px-8 bg-background w-fit absolute -bottom-3 left-1/2 -translate-x-1/2">
@@ -18,9 +18,9 @@ export const EventRow = ({event}: Props) => {
         </div>
       </div>
       <div className="flex gap-4 overflow-x-auto whitespace-nowrap pb-2">
-        {event?.roomingLists.map((_, i) => (
+        {event?.roomingLists.map(({bookingsCount, cutOffDate}, i) => (
           <div key={i} className="flex-shrink-0">
-            <EventCard />
+            <EventCard bookingsCount={bookingsCount} cutOffDate={cutOffDate} />
           </div>
         ))}
       </div>

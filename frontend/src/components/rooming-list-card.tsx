@@ -1,20 +1,23 @@
 import calendarIcon from "../assets/calendar 2.png";
 import viewAggreementIcon from "../assets/view-aggrement-icon.png";
 import { Button } from "./ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 type Props = {
-  roomingList:{
+  roomingList: {
     bookingsCount: number;
     cutOffDate: string;
     rfpName: string;
     agreementType: string;
-  }
+  };
 };
-export const RoomingListCard = ({ roomingList:{bookingsCount,cutOffDate, rfpName, agreementType, ...rest} }: Props) => {
-  console.log(rest)
+export const RoomingListCard = ({
+  roomingList: { bookingsCount, cutOffDate, rfpName, agreementType, ...rest },
+}: Props) => {
+  console.log(rest);
   const date = new Date(cutOffDate);
   const cutOffMonth = date.toLocaleString("en-US", { month: "short" });
-  const cutOffDay = date.getDate(); 
-  
+  const cutOffDay = date.getDate();
+
   return (
     <div className="bg-white  border-2 b-border rounded-md p-4 md:w-[400px]">
       <div className="flex md:justify-between">
@@ -43,14 +46,21 @@ export const RoomingListCard = ({ roomingList:{bookingsCount,cutOffDate, rfpName
             <span className="text-muted text-[10px] md:tex-sm">Jan 31 - Feb, 2025</span>
           </div>
         </div>
-        <div className="flex gap-4">
-          <Button className="text-white bg-active font-semibold md:w-full">
-            View Bookings ({bookingsCount})
-          </Button>
-          <div className="flex justify-center  items-center border-2 border-active p-2 rounded-lg">
-            <img src={viewAggreementIcon} />
-          </div>
-        </div>
+        <Tooltip>
+          <TooltipTrigger>
+            <div className="flex gap-4">
+              <Button className="text-white bg-active font-semibold md:w-full">
+                View Bookings ({bookingsCount})
+              </Button>
+              <div className="flex justify-center  items-center border-2 border-active p-2 rounded-lg">
+                <img src={viewAggreementIcon} />
+              </div>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Dhow Agreement as PDF</p>
+          </TooltipContent>
+        </Tooltip>
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ type Props = {
   bookingsCount: number;
   cutOffDate: string;
 };
-export const EventCard = ({ bookingsCount, cutOffDate }: Props) => {
+export const RoomingListCard = ({ bookingsCount, cutOffDate }: Props) => {
  
   const date = new Date(cutOffDate);
 

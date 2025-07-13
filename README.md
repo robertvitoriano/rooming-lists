@@ -34,7 +34,6 @@ Inside both the `frontend/` and `backend/` directories, install dependencies:
 ```bash
 npm install
 ```
-
 ---
 
 ### 2. Environment Configuration
@@ -47,7 +46,6 @@ Ensure that both the frontend and backend projects have a `.env` file in their r
 VITE_API_URL="http://localhost:3000"
 VITE_API_TOKEN="your-development-jwt-token"
 ```
-
 #### 🛠️ Backend `.env` example:
 
 ```env
@@ -60,9 +58,7 @@ JWT_SECRET="your-jwt-secret"
 JWT_PAYLOAD="your-jwt-payload"
 PORT=3000
 ```
-
 > ⚠️ Update these values to match your local PostgreSQL setup.
-
 ---
 
 ### 3. Starting the Applications
@@ -78,7 +74,6 @@ npm run start:dev
 ```bash
 npm run dev
 ```
-
 ---
 
 ## 🥪 Hybrid Mode (PostgreSQL in Docker + Apps on Localhost)
@@ -88,29 +83,21 @@ You can choose to run only PostgreSQL via Docker and the applications via Node.j
 ### Step-by-step:
 
 1. Start the PostgreSQL container (inside `backend/`):
-
    ```bash
    docker compose up
    ```
-
 2. Start the backend service locally (still inside `backend/`):
-
    ```bash
    npm run start:dev
    ```
-
 3. Start the frontend service locally (inside `frontend/`):
-
    ```bash
    npm run dev
    ```
-
 > ✅ This is useful for faster iteration without rebuilding Docker containers while still using a managed PostgreSQL instance.
-
 ---
 
 ## ✅ Running Tests
-
 The backend project includes a test suite using Jest.
 
 To run all tests, navigate to the `backend/` directory and execute:

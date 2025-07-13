@@ -8,10 +8,6 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new GlobalExceptionFilter());
   app.enableCors({ origin: '*', credentials: true });
-  
-  const seedService = app.get<SeedService>(SeedService);
-  await seedService.handle();
-
   await app.listen(env.PORT ?? 3000);
 }
 bootstrap();

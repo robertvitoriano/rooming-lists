@@ -1,43 +1,56 @@
-import { useState } from "react"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 const items = [
-  { id: "asc", label: "ascending" },
-  { id: "desc", label: "descending" },
-]
-type Props = {
-  checkedColor:string,
-  onSave: () => void
-}
-export default function CutOffDateSort({checkedColor, onSave}:Props) {
-  const [selected, setSelected] = useState<string[]>(["closed"])
+  { id: "asc", label: "Ascending" },
+  { id: "desc", label: "Descending" },
+];
 
-  const toggle = (id: string) => {
-    setSelected((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    )
-  }
+type Props = {
+  checkedColor: string;
+  onSave: () => void;
+  setCutOffDateSort: (sort: string) => void;
+};
+
+export default function CutOffDateSort({
+  checkedColor,
+  onSave,
+  setCutOffDateSort,
+}: Props) {
+  const [selected, setSelected] = useState("asc");
 
   const handleSubmit = () => {
-    onSave()
-  }
+    setCutOffDateSort(selected);
+    onSave();
+  };
 
   return (
-    <div className="flex flex-col gap-4 max-w-sm">
-      <span className="text-lg font-semibold">Sort: Cut-off Date</span>
-      {items.map((item) => (
-        <label key={item.id} className="flex items-center gap-2">
-          <Checkbox
-            checked={selected.includes(item.id)}
-            onCheckedChange={() => toggle(item.id)}
-            checkedColor={checkedColor}
-            
-          />
-          <span className="text-sm">{item.label}</span>
-        </label>
-      ))}
-      <Button onClick={handleSubmit}>Save</Button>
+    <div className="space-y-4">
+      <RadioGroup
+        value={selected}
+        onValueChange={(value) => setSelected(value)}
+        className="space-y-2"
+      >
+        {items.map((item) => (
+          <div className="flex items-center space-x-2" key={item.id}>
+            <RadioGroupItem
+              value={item.id}
+              id={item.id}
+              style={{ accentColor: checkedColor }}
+            />
+            <Label htmlFor={item.id}>{item.label}</Label>
+          </div>
+        ))}
+      </RadioGroup>
+      <Button
+        className="w-full"
+        style={{ backgroundColor: checkedColor }}
+        onClick={handleSubmit}
+      >
+        Save
+      </Button>
     </div>
-  )
+  );
 }

@@ -1,5 +1,5 @@
 import { api } from "@/lib/axios"
-import { PaginationParams, Response } from "./types"
+import {  Response } from "./types"
 export type Event = {
   id: string
   name: string

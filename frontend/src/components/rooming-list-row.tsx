@@ -29,9 +29,9 @@ export const RoomingListRow = ({ event, color }: Props) => {
         </div>
       </PopOverWrapper>
       <div className="flex gap-4 overflow-x-auto whitespace-nowrap pb-2">
-        {event?.roomingLists.map(({ bookingsCount, cutOffDate }, i) => (
+        {event?.roomingLists.map((roomingList, i) => (
           <div key={i} className="flex-shrink-0">
-            <RoomingListCard bookingsCount={bookingsCount} cutOffDate={cutOffDate} />
+            <RoomingListCard roomingList={roomingList} />
           </div>
         ))}
       </div>

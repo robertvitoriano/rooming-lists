@@ -2,22 +2,23 @@ import calendarIcon from "../assets/calendar 2.png";
 import viewAggreementIcon from "../assets/view-aggrement-icon.png";
 import { Button } from "./ui/button";
 type Props = {
-  bookingsCount: number;
-  cutOffDate: string;
+  roomingList:{
+    bookingsCount: number;
+    cutOffDate: string;
+    rfpName: string
+  }
 };
-export const RoomingListCard = ({ bookingsCount, cutOffDate }: Props) => {
+export const RoomingListCard = ({ roomingList:{bookingsCount,cutOffDate, rfpName} }: Props) => {
  
   const date = new Date(cutOffDate);
-
-  const month = date.toLocaleString("en-US", { month: "short" });
-
-  const day = date.getDate(); 
+  const cutOffMonth = date.toLocaleString("en-US", { month: "short" });
+  const cutOffDay = date.getDate(); 
   
   return (
-    <div className="bg-white  border b-border  md:w-[400px] rounded-md p-4">
+    <div className="bg-white  border-2 b-border rounded-md p-4 md:w-[400px]">
       <div className="flex md:justify-between">
         <div className="flex flex-col">
-          <span className="font-bold md:text-2xl">[RFP NAME]</span>
+          <span className="font-bold md:text-2xl">[{rfpName}]</span>
           <span className="md:text-[20px]">
             Agreement: <b>Staff</b>
           </span>
@@ -25,10 +26,10 @@ export const RoomingListCard = ({ bookingsCount, cutOffDate }: Props) => {
         <div className="flex flex-col items-center">
           <div className="border w-fit rounded-lg ">
             <div className="flex bg-accent-25 rounded-t-lg px-2  py-[2px]  md:px-[10px]">
-              <span className="text-accent font-semibold text-sm">{month}</span>
+              <span className="text-accent font-semibold text-sm">{cutOffMonth}</span>
             </div>
             <div className="flex justify-center bg-accent-10 rounded-b-lg">
-              <span className="text-accent font-semibold md:text-2xl ">{day}</span>
+              <span className="text-accent font-semibold md:text-2xl ">{cutOffDay}</span>
             </div>
           </div>
           <span className="text-muted text-xs">Cut-off Date</span>

@@ -10,8 +10,9 @@ const items = [
 type Props = {
   checkedColor:string,
   onSave: () => void
+  setFilteredStatus: (value:string[]) =>void
 }
-export default function RoomingListsFilter({checkedColor, onSave}:Props) {
+export default function RoomingListsFilter({checkedColor, onSave, setFilteredStatus}:Props) {
   const [selected, setSelected] = useState<string[]>(["closed"])
 
   const toggle = (id: string) => {
@@ -22,6 +23,7 @@ export default function RoomingListsFilter({checkedColor, onSave}:Props) {
 
   const handleSubmit = () => {
     onSave()
+    setFilteredStatus(selected)
   }
 
   return (

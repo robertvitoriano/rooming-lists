@@ -25,16 +25,10 @@ export type EventFilters = {
   status: string[]
 }
 
-export async function fetchEvents(
-  paginationParams: PaginationParams,
-  filters?: EventFilters
+export async function fetchBookingsByRoomingList(
+  roomingListId:string
 ): Promise<EventsReponseData> {
-  const response = await api.get<EventsReponseData>("/events", {
-    params: {
-      ...(paginationParams ? paginationParams: {}),
-      ...(filters ? filters: {})
-
-    },
-  })
+  const response = await api.get<EventsReponseData>(`/rooming-lists/${roomingListId}/bookings`)
+  console.log(response.data.data)
   return response.data
 }

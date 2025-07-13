@@ -4,11 +4,12 @@ import viewAgreementIcon from "../assets/view-agreement-icon.png";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { RoomingList } from "@/api/fetchEvents";
+import { fetchBookingsByRoomingList } from "@/api/fetch-bookings-by-roomingList";
 type Props = {
   roomingList: RoomingList
 };
 export const RoomingListCard = ({
-  roomingList: { bookingsCount, cutOffDate, rfpName, agreementType},
+  roomingList: {id, bookingsCount, cutOffDate, rfpName, agreementType},
 }: Props) => {
   const date = new Date(cutOffDate);
   const cutOffMonth = date.toLocaleString("en-US", { month: "short" });
@@ -44,7 +45,7 @@ export const RoomingListCard = ({
         </div>
 
         <div className="flex gap-4">
-          <Button className="text-white bg-active font-semibold md:w-full">
+          <Button className="text-white bg-active font-semibold md:w-full" onClick={() =>fetchBookingsByRoomingList(id)}>
             View Bookings ({bookingsCount})
           </Button>
           <TooltipProvider>

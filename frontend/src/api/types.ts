@@ -15,3 +15,7 @@ export interface Pagination {
   currentPageTotal: number
   totalPages: number
 }
+export type PaginationParams = {
+  page: number
+  perPage?: number
+}

@@ -1,4 +1,4 @@
-# 🧠 Architecture Overview
+# 🧠 Appplication structure overview
 
 The goal here is to provide a high-level overview of the architecture OF this project. 
 ---

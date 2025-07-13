@@ -1,6 +1,5 @@
-import { Logger } from '@nestjs/common';
 import { SeedService } from './application/services/seed.service';
-import { GlobalExceptionFilter } from './infrastructure/http/global-exception-filter';
+import { GlobalExceptionFilter } from './presentation/http/global-exception-filter';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './presentation/app.module';
 import { env } from './config/env';

@@ -17,6 +17,7 @@ import { Sorting } from 'src/core/repositories/types';
 import { IRoomingListAgreementType } from 'src/core/entities/value-objects/rooming-list-agreement-type';
 import { plainToInstance } from 'class-transformer';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { IRoomingListStatus } from 'src/core/entities/value-objects/rooming-list-status';
 @UseGuards(JwtAuthGuard)
 @Controller('/events')
 export class EventsController {
@@ -27,16 +28,28 @@ export class EventsController {
 
   @Get('/')
   async fetchEventsWithRoomingLists(
-    @Query() query: Record<string, any>,
+    @Query() query: FetchRoomingListsQueryDto,
   ): Promise<ControllerResponse<EventWithRoomingListResponseData[]>> {
     const queryDto = plainToInstance(FetchRoomingListsQueryDto, query);
 
-    const { search, status, page, perPage, sort } =
-      queryDto;
+    const { search, page, perPage, sort } = queryDto;
+    const status = queryDto['status[]'];
 
+    const validStatuses: IRoomingListStatus[] = [];
+    
+    if (status?.length > 0 && typeof status !== "string") {
+      status.forEach((value: string) => {
+        if (roomingListsStatusMap[value]) {
+          validStatuses.push(roomingListsStatusMap[value]);
+        }
+      });
+    } else if (status) {
+      validStatuses.push(roomingListsStatusMap[status]);
+    }
+    
     const { eventsWithRoomingLists, total } =
       await this.fetchEventsWithRoomingListsUseCase.execute({
-        status: roomingListsStatusMap[status as string],
+        status: validStatuses.length > 0 ? validStatuses : [],
         search,
         page,
         perPage,
@@ -95,8 +108,7 @@ export class EventsController {
   ): Promise<ControllerResponse<RoomingListResponseData[]>> {
     const queryDto = plainToInstance(FetchRoomingListsQueryDto, query);
 
-    const { status, rfpName, agreementType, page, perPage, sort } =
-      queryDto;
+    const { status, rfpName, agreementType, page, perPage, sort } = queryDto;
     const { roomingLists, total } =
       await this.fetchRoomingListsByEventUseCase.execute({
         status: roomingListsStatusMap[status as string],

@@ -1,8 +1,8 @@
 import { RoomingList } from '../entities/rooming-list';
 import { IRoomingListAgreementType } from '../entities/value-objects/rooming-list-agreement-type';
-import { PaginationParams, Sorting } from './types';
+import { PaginationParams } from './types';
 export type RoomingListFilteringOptions = {
-  status?;
+  status?: string[]
   eventName?: string;
   rfpName?: string;
   agreementType?: IRoomingListAgreementType;

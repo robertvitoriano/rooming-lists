@@ -7,7 +7,7 @@ import { IRoomingListsRepository } from '../repositories/IRoomingListsRepository
 import { PaginationParams } from '../repositories/types';
 interface FetchRoomingListsByEventRequest extends PaginationParams {
   eventId: string;
-  status?: IRoomingListStatus;
+  status?: IRoomingListStatus[];
   rfpName?: string;
   agreementType?: IRoomingListAgreementType;
   eventName?: string;

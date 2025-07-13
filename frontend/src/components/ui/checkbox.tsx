@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils"
 type CheckboxProps = React.ComponentPropsWithoutRef<
   typeof CheckboxPrimitive.Root
 > & {
-  checkedColor?: string // Hex like "#00C2A6"
+  checkedColor?: string
 }
 
 const Checkbox = React.forwardRef<
@@ -28,7 +28,10 @@ const Checkbox = React.forwardRef<
               ["--checked-bg" as string]: checkedColor,
               
             }
-          : undefined
+          : {
+              ["--checked-bg" as string]: "black",
+              
+            }
       }
       {...props}
     >

@@ -10,8 +10,7 @@ export class AuthController {
 
   @Post('/')
   async seed() {
-   const result = await this.authService.handle(env.JWT_PAYLOAD)
-   console.log(result)
+    await this.authService.handle(env.JWT_PAYLOAD)
     
   }
 }

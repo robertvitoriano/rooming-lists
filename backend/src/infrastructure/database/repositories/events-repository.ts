@@ -8,7 +8,7 @@ import {
   IEventsRepository,
 } from 'src/core/repositories/IEventsRepository';
 import { RoomingList } from 'src/core/entities/rooming-list';
-import { PaginationParams, Sorting } from 'src/core/repositories/types';
+import { PaginationParams } from 'src/core/repositories/types';
 import { RoomingListFilteringOptions } from 'src/core/repositories/IRoomingListsRepository';
 export class EventsRepository implements IEventsRepository {
   constructor(
@@ -53,6 +53,45 @@ export class EventsRepository implements IEventsRepository {
       .getRepository(EventModel)
       .createQueryBuilder('event');
 
+    if (filters?.search) {
+      baseQuery
+        .andWhere('roomingList.rfp_name ILIKE :search', {
+          search: `%${filters.search}%`,
+        })
+        .orWhere('roomingList.agreement_type ILIKE :search', {
+          search: `%${filters.search}%`,
+        })
+        .orWhere('event.name ILIKE :search', {
+          search: `%${filters.search}%`,
+        });
+
+      countQuery
+        .leftJoin('event.roomingLists', 'roomingList')
+        .orWhere('roomingList.rfp_name ILIKE :search', {
+          search: `%${filters.search}%`,
+        })
+        .orWhere('roomingList.agreement_type ILIKE :search', {
+          search: `%${filters.search}%`,
+        })
+        .orWhere('event.name ILIKE :search', {
+          search: `%${filters.search}%`,
+        });
+    }
+
+    const status = filters?.status;
+
+    if (status && status.length > 0) {
+      baseQuery.andWhere('roomingList.status IN (:...status)', {
+        status,
+      });
+
+      countQuery
+        .leftJoin('event.roomingLists', 'roomingList')
+        .andWhere('roomingList.status IN (:...status)', {
+          status,
+        });
+    }
+
     if (filters?.eventName) {
       baseQuery.andWhere('event.name ILIKE :eventName', {
         eventName: `%${filters.eventName}%`,
@@ -60,17 +99,6 @@ export class EventsRepository implements IEventsRepository {
       countQuery.andWhere('event.name ILIKE :eventName', {
         eventName: `%${filters.eventName}%`,
       });
-    }
-
-    if (filters?.status) {
-      baseQuery.andWhere('roomingList.status = :status', {
-        status: filters.status,
-      });
-      countQuery
-        .leftJoin('event.roomingLists', 'roomingList')
-        .andWhere('roomingList.status = :status', {
-          status: filters.status,
-        });
     }
 
     if (filters?.agreementType) {
@@ -92,31 +120,6 @@ export class EventsRepository implements IEventsRepository {
         .leftJoin('event.roomingLists', 'roomingList')
         .andWhere('roomingList.rfp_name ILIKE :rfpName', {
           rfpName: `%${filters.rfpName}%`,
-        });
-    }
-
-    if (filters?.search) {
-      baseQuery
-        .andWhere('roomingList.rfp_name ILIKE :search', {
-          search: `%${filters.search}%`,
-        })
-        .orWhere('roomingList.agreement_type ILIKE :search', {
-          search: `%${filters.search}%`,
-        })
-        .orWhere('event.name ILIKE :search', {
-          search: `%${filters.search}%`,
-        });
-        
-      countQuery
-        .leftJoin('event.roomingLists', 'roomingList')
-        .orWhere('roomingList.rfp_name ILIKE :search', {
-          search: `%${filters.search}%`,
-        })
-        .orWhere('roomingList.agreement_type ILIKE :search', {
-          search: `%${filters.search}%`,
-        })
-        .orWhere('event.name ILIKE :search', {
-          search: `%${filters.search}%`,
         });
     }
 

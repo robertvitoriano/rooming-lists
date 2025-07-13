@@ -118,3 +118,25 @@ To run all tests, navigate to the `backend/` directory and execute:
 ```bash
 npm run test
 ```
+# 📦 Executing the Application
+
+After running the application, the following steps and interactions are available:
+
+## 🧭 What to Expect
+
+- Upon initial load, the screen will appear **empty with no rooming list cards**.
+- Click the **"Insert Bookings and Rooming Lists"** button to populate the screen with data.
+
+## 🔍 Interactions
+
+- 📝 **View Bookings**: Click the **"View Bookings"** button on a rooming list card to log its bookings in the browser's `console.log`.
+- 🔎 **Search**: Use the search input to look up rooming lists by:
+  - **RFP Name**
+  - **Event Name**
+  - **Agreement Type**
+- 🎯 **Filter by Status**:
+  - Filter rooming lists by **Cancelled**, **Active**, or **Closed** statuses.
+- 📅 **Sort by Cut-Off Date**:
+  - Each rooming list row includes a **Sort** button.
+  - Clicking this opens a popup (similar to the status filter) that allows sorting by **Cut-Off Date**.
+  - Each rooming lists row has a sort button, by clicking on that a pop up similar to status filter will apear and allows user to change cut off date filter

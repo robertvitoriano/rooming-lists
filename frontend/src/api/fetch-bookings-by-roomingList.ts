@@ -29,5 +29,6 @@ export async function fetchBookingsByRoomingList(
   roomingListId:string
 ): Promise<EventsReponseData> {
   const response = await api.get<EventsReponseData>(`/rooming-lists/${roomingListId}/bookings`)
+  console.log(response.data)
   return response.data
 }

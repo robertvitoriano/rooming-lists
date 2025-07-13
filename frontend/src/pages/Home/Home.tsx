@@ -6,11 +6,12 @@ import { EventRow } from "@/components/event-row";
 import { PopOverWrapper } from "@/components/pop-over-wrapper";
 import RoomingListsFilter from "@/components/rooming-lists-filter";
 import { fetchEvents } from "@/api/api";
+import { generateRandomColors } from "@/lib/utils";
 
 export function Home() {
   const [events, setEvents] = useState([]);
   const [colors, setColors] = useState<string[]>([]);
-
+  
   useEffect(() => {
     loadData();
   }, []);
@@ -21,12 +22,6 @@ export function Home() {
       setEvents(eventsResponse.data);
       setColors(generateRandomColors(eventsResponse.data.length));
     }
-  };
-
-  const generateRandomColors = (count: number): string[] => {
-    return Array.from({ length: count }, () =>
-      `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0")}`
-    );
   };
 
   return (

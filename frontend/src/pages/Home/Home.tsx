@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import searcIcon from "../../assets/search-icon.png";
-import MixerIcon from "../../assets/mixer-3-sliders.svg?react";
+import MixerIcon from "../../assets/mixer-icon.svg?react";
 import { useEffect, useState } from "react";
 import { PopOverWrapper } from "@/components/pop-over-wrapper";
 import RoomingListsFilter from "@/components/rooming-lists-filter";
@@ -40,15 +40,14 @@ export function Home() {
           >
             <div className="flex justify-center items-center border b-border bg-white rounded px-6 py-2 gap-3">
               <span className="text-black">Filters</span>
-              <MixerIcon style={{ color: colors[0] }} />
+              <MixerIcon style={{ color: colors[0], width: "18px", height: "18px" }} />
             </div>
           </PopOverWrapper>
         </div>
       </div>
-      {events &&
-        events.map((event, index) => (
-          <RoomingListRow key={event.id} event={event} color={colors[index]} />
-        ))}
+      {events.map((event, index) => (
+        <RoomingListRow key={event.id} event={event} color={colors[index]} />
+      ))}
     </div>
   );
 }

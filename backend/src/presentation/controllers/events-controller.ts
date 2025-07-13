@@ -36,8 +36,8 @@ export class EventsController {
     const status = queryDto['status[]'];
 
     const validStatuses: IRoomingListStatus[] = [];
-    
-    if (status?.length > 0 && typeof status !== "string") {
+
+    if (status?.length > 0 && typeof status !== 'string') {
       status.forEach((value: string) => {
         if (roomingListsStatusMap[value]) {
           validStatuses.push(roomingListsStatusMap[value]);
@@ -46,7 +46,7 @@ export class EventsController {
     } else if (status) {
       validStatuses.push(roomingListsStatusMap[status]);
     }
-    
+
     const { eventsWithRoomingLists, total } =
       await this.fetchEventsWithRoomingListsUseCase.execute({
         status: validStatuses.length > 0 ? validStatuses : [],
@@ -71,6 +71,8 @@ export class EventsController {
           status,
           updatedAt,
           bookingsCount,
+          startDate,
+          endDate,
         }) => ({
           id: roomingListId.toValue(),
           agreementType,
@@ -82,6 +84,8 @@ export class EventsController {
           status,
           updatedAt,
           bookingsCount,
+          startDate,
+          endDate,
         }),
       ),
     }));

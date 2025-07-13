@@ -1,12 +1,16 @@
+import { Booking } from '../entities/booking';
 import { Event } from '../entities/event';
 import { RoomingList } from '../entities/rooming-list';
 import { RoomingListFilteringOptions } from './IRoomingListsRepository';
 import { PaginationParams } from './types';
-
+export interface RoomingListsWithBookings{
+  roomingList:RoomingList
+  bookings: Booking[]
+}
 export interface EventWithRoomingLists {
   id: string;
   name: string;
-  roomingLists: RoomingList[];
+  roomingListsWithBooking: RoomingListsWithBookings[];
 }
 
 export interface IEventsRepository {

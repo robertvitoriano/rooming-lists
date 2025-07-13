@@ -10,6 +10,7 @@ import {
 import { RoomingList } from 'src/core/entities/rooming-list';
 import { PaginationParams } from 'src/core/repositories/types';
 import { RoomingListFilteringOptions } from 'src/core/repositories/IRoomingListsRepository';
+import { Booking } from 'src/core/entities/booking';
 export class EventsRepository implements IEventsRepository {
   constructor(
     @InjectRepository(EventModel)
@@ -47,7 +48,11 @@ export class EventsRepository implements IEventsRepository {
       .getRepository(EventModel)
       .createQueryBuilder('event')
       .leftJoinAndSelect('event.roomingLists', 'roomingList')
-      .leftJoinAndSelect('roomingList.roomingListBookings', 'booking');
+      .leftJoinAndSelect(
+        'roomingList.roomingListBookings',
+        'roomingListBooking',
+      )
+      .leftJoinAndSelect('roomingListBooking.booking', 'booking');
 
     const countQuery = this.dataSource
       .getRepository(EventModel)
@@ -134,7 +139,7 @@ export class EventsRepository implements IEventsRepository {
       ({ id, name, roomingLists }) => ({
         id,
         name,
-        roomingLists: roomingLists
+        roomingListsWithBooking: roomingLists
           .sort((a, b) => b.cutOffDate.getTime() - a.cutOffDate.getTime())
           .slice(0, ROOMING_LISTS_COUNT)
           .map(
@@ -148,8 +153,8 @@ export class EventsRepository implements IEventsRepository {
               status,
               createdAt,
               roomingListBookings,
-            }) =>
-              new RoomingList(
+            }) => ({
+              roomingList: new RoomingList(
                 {
                   eventId,
                   hotelId,
@@ -161,6 +166,33 @@ export class EventsRepository implements IEventsRepository {
                 { id, createdAt },
                 { bookingsCount: roomingListBookings?.length ?? 0 },
               ),
+              bookings: roomingListBookings.map(
+                ({
+                  booking: {
+                    checkInDate,
+                    checkOutDate,
+                    createdAt,
+                    guestName,
+                    guestPhoneNumber,
+                    id,
+                    updatedAt,
+                  },
+                }) =>
+                  new Booking(
+                    {
+                      checkInDate,
+                      checkOutDate,
+                      guestName,
+                      guestPhoneNumber,
+                    },
+                    {
+                      createdAt,
+                      id,
+                      updatedAt,
+                    },
+                  ),
+              ),
+            }),
           ),
       }),
     );

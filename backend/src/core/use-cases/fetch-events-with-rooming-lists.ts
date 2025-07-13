@@ -1,3 +1,4 @@
+import { writeFileSync } from 'fs';
 import { IRoomingListAgreementType } from '../entities/value-objects/rooming-list-agreement-type';
 import { IRoomingListStatus } from '../entities/value-objects/rooming-list-status';
 import {
@@ -5,16 +6,21 @@ import {
   IEventsRepository,
 } from '../repositories/IEventsRepository';
 import { PaginationParams } from '../repositories/types';
+import { RoomingList } from '../entities/rooming-list';
 
 interface FetchEventsWithRoomingListsRequest extends PaginationParams {
   status?: IRoomingListStatus[];
   rfpName?: string;
   agreementType?: IRoomingListAgreementType;
   eventName?: string;
-  search?:string
+  search?: string;
 }
 export interface FetchEventsWithRoomingListsResponse {
-  eventsWithRoomingLists: EventWithRoomingLists[];
+  eventsWithRoomingLists: {
+    id: string;
+    name: string;
+    roomingLists: RoomingList[];
+  }[];
   total: number;
 }
 
@@ -23,8 +29,8 @@ export class FetchEventsWithRoomingListsUseCase {
   async execute(
     params: FetchEventsWithRoomingListsRequest,
   ): Promise<FetchEventsWithRoomingListsResponse> {
-    const { status = [], search, page, perPage, sort } =
-      params;
+    const { status = [], search, page, perPage, sort } = params;
+
     const { eventsWithRoomingLists, total } =
       await this.eventslistRepository.listWithRoomingLists(
         {
@@ -34,10 +40,26 @@ export class FetchEventsWithRoomingListsUseCase {
         },
         {
           status,
-          search
+          search,
         },
       );
+      writeFileSync('eventsWithRoomingLists.json', JSON.stringify(eventsWithRoomingLists))
 
-    return { eventsWithRoomingLists, total };
+    const events = eventsWithRoomingLists.map(
+      ({ id, name, roomingListsWithBooking }) => {
+        return {
+          id,
+          name,
+          roomingLists: roomingListsWithBooking.map(
+            ({ bookings, roomingList }) => {
+              roomingList.setStartAndEndDateBasedOnBookings(bookings);
+              return roomingList;
+            },
+          ),
+        };
+      },
+    );
+
+    return { eventsWithRoomingLists: events, total };
   }
 }

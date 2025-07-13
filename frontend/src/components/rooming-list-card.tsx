@@ -5,11 +5,12 @@ type Props = {
   roomingList:{
     bookingsCount: number;
     cutOffDate: string;
-    rfpName: string
+    rfpName: string;
+    agreementType: string;
   }
 };
-export const RoomingListCard = ({ roomingList:{bookingsCount,cutOffDate, rfpName} }: Props) => {
- 
+export const RoomingListCard = ({ roomingList:{bookingsCount,cutOffDate, rfpName, agreementType, ...rest} }: Props) => {
+  console.log(rest)
   const date = new Date(cutOffDate);
   const cutOffMonth = date.toLocaleString("en-US", { month: "short" });
   const cutOffDay = date.getDate(); 
@@ -20,7 +21,7 @@ export const RoomingListCard = ({ roomingList:{bookingsCount,cutOffDate, rfpName
         <div className="flex flex-col">
           <span className="font-bold md:text-2xl">[{rfpName}]</span>
           <span className="md:text-[20px]">
-            Agreement: <b>Staff</b>
+            Agreement: <b>{agreementType}</b>
           </span>
         </div>
         <div className="flex flex-col items-center">

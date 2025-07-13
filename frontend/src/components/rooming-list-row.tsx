@@ -5,7 +5,7 @@ import { PopOverWrapper } from "./pop-over-wrapper";
 import CutOffDateSort from "./cut-off-date-sort";
 type Props = {
   event: {
-    roomingLists: Array<{ bookingsCount: number; cutOffDate: string }>;
+    roomingLists: Array<{ bookingsCount: number; cutOffDate: string; agreementType: string; rfpName:string }>;
     name: string;
   };
   color: string;

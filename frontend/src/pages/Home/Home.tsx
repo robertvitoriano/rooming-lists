@@ -69,6 +69,7 @@ export function Home() {
                 checkedColor={colors[0]}
                 onSave={() => handleStatusFilterSave(close)}
                 setFilteredStatus = {setFilteredStatus}
+                selectedStatus={filteredStatus}
               />
             )}
           >

@@ -1,13 +1,25 @@
 import { Input } from "@/components/ui/input";
 import searcIcon from "../../assets/search-icon.png";
 import filtersIcon from "../../assets/filters-icon.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EventRow } from "@/components/event-row";
 import { PopOverWrapper } from "@/components/pop-over-wrapper";
 import RoomingListsFilter from "@/components/rooming-lists-filter";
+import { fetchEvents } from "@/api/api";
 
 export function Home() {
-  const [events, setEvents] = useState([2, 2, 4, 5]);
+  const [events, setEvents] = useState([]);
+  
+  useEffect(()=>{
+    loadData()
+  },[])
+  
+  const loadData = async () =>{
+    const eventsResponse = await fetchEvents()
+    if(eventsResponse?.data){
+      setEvents(eventsResponse.data)
+    }
+  }
 
   return (
     <div className="flex flex-col gap-8">
@@ -28,8 +40,8 @@ export function Home() {
           </PopOverWrapper>
         </div>
       </div>
-      {events.map(() => (
-        <EventRow roomingLists={[2, 3, 54, 153, 5]} />
+      {events && events.map((event) => (
+        <EventRow event={event} />
       ))}
     </div>
   );

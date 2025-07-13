@@ -11,6 +11,6 @@ COPY . .
 RUN npm install
 RUN npm run build
 
-CMD npm run migration:run && npm run start
+CMD  npm run start:docker
 
 

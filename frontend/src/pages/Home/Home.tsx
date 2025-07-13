@@ -39,6 +39,11 @@ export function Home() {
   const handleStatusFilterSave = (closeFilter: () => void) => {
     closeFilter();
   };
+  const handleDataSeeding = async() =>{
+    await insertBookingsAndRoomingLists()
+    await loadData()
+    
+  }
 
   return (
     <div className="flex flex-col gap-8">
@@ -72,7 +77,7 @@ export function Home() {
               <MixerIcon style={{ color: colors[0], width: "18px", height: "18px" }} />
             </div>
           </PopOverWrapper>
-          <Button onClick={insertBookingsAndRoomingLists}>Insert Bookings and Rooming Lists</Button>
+          <Button onClick={handleDataSeeding}>Insert Bookings and Rooming Lists</Button>
         </div>
       </div>
       {events.map((event, index) => (

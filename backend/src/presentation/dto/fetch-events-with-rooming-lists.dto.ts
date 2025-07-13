@@ -43,5 +43,5 @@ export class FetchRoomingListsQueryDto {
 export const roomingListsStatusMap = {
   active: 'received',
   closed: 'completed',
-  cancelled: 'achived',
+  canceled: 'archived',
 };

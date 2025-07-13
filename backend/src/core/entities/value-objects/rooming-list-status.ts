@@ -1,7 +1,7 @@
-export type IRoomingListStatus = 'active' | 'closed' | 'cancelled';
+export type IRoomingListStatus = 'active' | 'closed' | 'canceled';
 
 export class RoomingListStatus {
-  private static readonly allowedStatuses: IRoomingListStatus[] = ['active', 'closed', 'cancelled'];
+  private static readonly allowedStatuses: IRoomingListStatus[] = ['active', 'closed', 'canceled'];
 
   private constructor(private readonly value: IRoomingListStatus) {}
 
@@ -18,5 +18,5 @@ export class RoomingListStatus {
 
   public static ACTIVE = new RoomingListStatus('active');
   public static CLOSED = new RoomingListStatus('closed');
-  public static CANCELLED = new RoomingListStatus('cancelled');
+  public static CANCELED = new RoomingListStatus('canceled');
 }

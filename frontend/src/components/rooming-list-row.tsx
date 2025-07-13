@@ -49,6 +49,7 @@ const [cutOffDateSort, setCutOffDateSort] = useState<string>("DESC");
             checkedColor={color}
             onSave={() => handleCutOffDateSortSave(close)}
             setCutOffDateSort={setCutOffDateSort}
+            cuttOffSortSelectedValue={cutOffDateSort}
           />
         )}
       >

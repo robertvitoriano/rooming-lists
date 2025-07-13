@@ -1,25 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 
 const items = [
-  { id: "asc", label: "Ascending" },
-  { id: "desc", label: "Descending" },
+  { id: "ASC", label: "Ascending" },
+  { id: "DESC", label: "Descending" },
 ];
 
 type Props = {
   checkedColor: string;
   onSave: () => void;
   setCutOffDateSort: (sort: string) => void;
+  cuttOffSortSelectedValue: string;
 };
 
 export default function CutOffDateSort({
   checkedColor,
   onSave,
   setCutOffDateSort,
+  cuttOffSortSelectedValue,
 }: Props) {
-  const [selected, setSelected] = useState("asc");
+  const [selected, setSelected] = useState(cuttOffSortSelectedValue);
+
+  useEffect(() => {
+    setSelected(cuttOffSortSelectedValue);
+  }, [cuttOffSortSelectedValue]);
 
   const handleSubmit = () => {
     setCutOffDateSort(selected);
@@ -30,7 +36,7 @@ export default function CutOffDateSort({
     <div className="space-y-4">
       <RadioGroup
         value={selected}
-        onValueChange={(value) => setSelected(value)}
+        onValueChange={setSelected}
         className="space-y-2"
       >
         {items.map((item) => (

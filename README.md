@@ -118,17 +118,3 @@ To run all tests, navigate to the `backend/` directory and execute:
 ```bash
 npm run test
 ```
-
-You can also run tests in watch mode for development:
-
-```bash
-npm run test:watch
-```
-
-Or generate a coverage report:
-
-```bash
-npm run test:cov
-```
-
-Make sure all environment variables and dependencies are correctly configured before running tests.

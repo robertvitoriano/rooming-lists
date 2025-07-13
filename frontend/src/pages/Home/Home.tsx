@@ -7,6 +7,8 @@ import RoomingListsFilter from "@/components/rooming-lists-filter";
 import { generateRandomColors } from "@/lib/utils";
 import { RoomingListRow } from "@/components/rooming-list-row";
 import { fetchEvents } from "@/api/fetchEvents";
+import { Button } from "@/components/ui/button";
+import { insertBookingsAndRoomingLists } from "@/api/insert-bookings-and-rooming-lists";
 
 export function Home() {
   const [events, setEvents] = useState([]);
@@ -70,6 +72,7 @@ export function Home() {
               <MixerIcon style={{ color: colors[0], width: "18px", height: "18px" }} />
             </div>
           </PopOverWrapper>
+          <Button onClick={insertBookingsAndRoomingLists}>Insert Bookings and Rooming Lists</Button>
         </div>
       </div>
       {events.map((event, index) => (

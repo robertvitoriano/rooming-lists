@@ -1,6 +1,8 @@
 import { lightenColor } from "@/lib/utils";
 import { RoomingListCard } from "./rooming-list-card";
 import { CaretSortIcon } from "@radix-ui/react-icons";
+import { PopOverWrapper } from "./pop-over-wrapper";
+import CutOffDateSort from "./cut-off-date-sort";
 type Props = {
   event: {
     roomingLists: Array<{ bookingsCount: number; cutOffDate: string }>;
@@ -21,9 +23,11 @@ export const RoomingListRow = ({ event, color }: Props) => {
           </div>
         </div>
       </div>
-      <div className="bg-white  p-2 w-fit h-fit rounded-xl">
-        <CaretSortIcon className="rotate-90 w-6 h-6" style={{ color }} />
-      </div>
+      <PopOverWrapper content={(close) => <CutOffDateSort checkedColor={color} onSave={close} />}>
+        <div className="bg-white  p-2 w-fit h-fit rounded-xl">
+          <CaretSortIcon className="rotate-90 w-6 h-6" style={{ color }} />
+        </div>
+      </PopOverWrapper>
       <div className="flex gap-4 overflow-x-auto whitespace-nowrap pb-2">
         {event?.roomingLists.map(({ bookingsCount, cutOffDate }, i) => (
           <div key={i} className="flex-shrink-0">

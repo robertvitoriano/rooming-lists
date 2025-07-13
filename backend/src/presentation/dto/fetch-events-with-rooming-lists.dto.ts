@@ -20,6 +20,10 @@ export class FetchRoomingListsQueryDto {
   agreementType?: string;
 
   @IsOptional()
+  @IsString()
+  search?: string;
+
+  @IsOptional()
   @Type(() => Number)
   @IsInt()
   @Min(1)

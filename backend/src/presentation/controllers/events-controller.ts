@@ -31,15 +31,13 @@ export class EventsController {
   ): Promise<ControllerResponse<EventWithRoomingListResponseData[]>> {
     const queryDto = plainToInstance(FetchRoomingListsQueryDto, query);
 
-    const { eventName, status, rfpName, agreementType, page, perPage, sort } =
+    const { search, status, page, perPage, sort } =
       queryDto;
 
     const { eventsWithRoomingLists, total } =
       await this.fetchEventsWithRoomingListsUseCase.execute({
         status: roomingListsStatusMap[status as string],
-        rfpName,
-        agreementType: agreementType as IRoomingListAgreementType,
-        eventName,
+        search,
         page,
         perPage,
         sort,

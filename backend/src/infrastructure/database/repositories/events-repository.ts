@@ -95,6 +95,37 @@ export class EventsRepository implements IEventsRepository {
         });
     }
 
+    if (filters?.search) {
+      baseQuery
+        .andWhere('roomingList.rfp_name ILIKE :search', {
+          search: `%${filters.search}%`,
+        })
+        .orWhere('roomingList.agreement_type ILIKE :search', {
+          search: `%${filters.search}%`,
+        })
+        .orWhere('roomingList.rfp_name ILIKE :search', {
+          search: `%${filters.search}%`,
+        })
+        .orWhere('event.name ILIKE :search', {
+          search: `%${filters.search}%`,
+        });
+        
+      countQuery
+        .leftJoin('event.roomingLists', 'roomingList')
+        .orWhere('roomingList.rfp_name ILIKE :search', {
+          search: `%${filters.search}%`,
+        })
+        .orWhere('roomingList.agreement_type ILIKE :search', {
+          search: `%${filters.search}%`,
+        })
+        .orWhere('roomingList.rfp_name ILIKE :search', {
+          search: `%${filters.search}%`,
+        })
+        .orWhere('event.name ILIKE :search', {
+          search: `%${filters.search}%`,
+        });
+    }
+
     baseQuery.skip(skip).take(perPage).orderBy('event.createdAt', sort);
 
     const [result, total] = await Promise.all([

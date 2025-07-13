@@ -15,7 +15,7 @@ export function Home() {
   const [filteredSearch, setFilteredSearch] = useState<string>("");
   useEffect(() => {
     loadData();
-  }, []);
+  }, [filteredSearch, filteredStatus]);
 
   const loadData = async () => {
     const eventsResponse = await fetchEvents(
@@ -27,6 +27,7 @@ export function Home() {
         status: filteredStatus,
       }
     );
+
     if (eventsResponse?.data) {
       setEvents(eventsResponse.data);
       setColors(generateRandomColors(eventsResponse.data.length));

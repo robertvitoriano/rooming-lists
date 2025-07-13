@@ -6,6 +6,7 @@ export type RoomingListFilteringOptions = {
   eventName?: string;
   rfpName?: string;
   agreementType?: IRoomingListAgreementType;
+  search?:string
 };
 export interface IRoomingListsRepository {
   findManyByEventId(

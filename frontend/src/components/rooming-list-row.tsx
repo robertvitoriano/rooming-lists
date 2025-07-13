@@ -3,18 +3,19 @@ import { RoomingListCard } from "./rooming-list-card";
 import { CaretSortIcon } from "@radix-ui/react-icons";
 import { PopOverWrapper } from "./pop-over-wrapper";
 import CutOffDateSort from "./cut-off-date-sort";
+import { RoomingList } from "@/api/fetchEvents";
 type Props = {
   event: {
-    roomingLists: Array<{ bookingsCount: number; cutOffDate: string; agreementType: string; rfpName:string }>;
+    roomingLists: Array<RoomingList>;
     name: string;
   };
   color: string;
 };
-export const RoomingListRow = ({ event, color }: Props) => {
+export const RoomingListRow = ({ event, color}: Props) => {
   const lightColor = lightenColor(color, 0.5);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4" >
       <div className="relative">
         <div className={`w-full border-[0.5px] border-b]`} style={{ borderColor: color }}></div>
         <div className=" px-2 md:px-8 bg-background w-fit absolute -bottom-3 left-1/2 -translate-x-1/2">
@@ -30,8 +31,8 @@ export const RoomingListRow = ({ event, color }: Props) => {
       </PopOverWrapper>
       <div className="flex gap-4 overflow-x-auto whitespace-nowrap pb-2">
         {event?.roomingLists.map((roomingList, i) => (
-          <div key={i} className="flex-shrink-0">
-            <RoomingListCard roomingList={roomingList} />
+          <div key={roomingList.id} className="flex-shrink-0">
+            <RoomingListCard roomingList={roomingList} key={roomingList.id}/>
           </div>
         ))}
       </div>

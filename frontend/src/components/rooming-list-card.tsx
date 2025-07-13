@@ -3,18 +3,13 @@ import calendarIcon from "../assets/calendar 2.png";
 import viewAgreementIcon from "../assets/view-agreement-icon.png";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { RoomingList } from "@/api/fetchEvents";
 type Props = {
-  roomingList: {
-    bookingsCount: number;
-    cutOffDate: string;
-    rfpName: string;
-    agreementType: string;
-  };
+  roomingList: RoomingList
 };
 export const RoomingListCard = ({
-  roomingList: { bookingsCount, cutOffDate, rfpName, agreementType, ...rest },
+  roomingList: { bookingsCount, cutOffDate, rfpName, agreementType},
 }: Props) => {
-  console.log(rest);
   const date = new Date(cutOffDate);
   const cutOffMonth = date.toLocaleString("en-US", { month: "short" });
   const cutOffDay = date.getDate();

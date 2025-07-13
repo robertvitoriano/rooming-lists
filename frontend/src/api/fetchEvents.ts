@@ -18,6 +18,8 @@ export type RoomingList = {
   createdAt: string
   updatedAt: string
   bookingsCount: number
+  startDate: string
+  endDate: string
 }
 
 export type EventFilters = {

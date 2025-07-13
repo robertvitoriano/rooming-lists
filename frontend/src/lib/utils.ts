@@ -24,3 +24,15 @@ export function lightenColor(hex: string, percent: number): string {
 
   return `rgb(${r}, ${g}, ${b})`
 }
+
+export function getDayAndMonthFromISOString(dateIsoString: string): {
+  month: string
+  day: number
+  year: number
+} {
+  const date = new Date(dateIsoString)
+  const month = date.toLocaleString("en-US", { month: "short" })
+  const day = date.getDate()
+  const year = date.getFullYear()
+  return { month, day, year }
+}

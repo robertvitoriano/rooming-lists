@@ -5,15 +5,16 @@ import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { RoomingList } from "@/api/fetchEvents";
 import { fetchBookingsByRoomingList } from "@/api/fetch-bookings-by-roomingList";
+import { getDayAndMonthFromISOString } from "@/lib/utils";
 type Props = {
-  roomingList: RoomingList
+  roomingList: RoomingList;
 };
 export const RoomingListCard = ({
-  roomingList: {id, bookingsCount, cutOffDate, rfpName, agreementType},
+  roomingList: { id, bookingsCount, cutOffDate, rfpName, agreementType, startDate, endDate },
 }: Props) => {
-  const date = new Date(cutOffDate);
-  const cutOffMonth = date.toLocaleString("en-US", { month: "short" });
-  const cutOffDay = date.getDate();
+  const { day: cutOffDay, month: cutOffMonth } = getDayAndMonthFromISOString(cutOffDate);
+  const { day: startDateDay, month: startDateMonth } = getDayAndMonthFromISOString(startDate);
+  const { year: endDateYear, month: endDateDay } = getDayAndMonthFromISOString(endDate);
 
   return (
     <div className="bg-white  border-2 b-border rounded-md p-4 md:w-[400px]">
@@ -40,12 +41,15 @@ export const RoomingListCard = ({
         <div>
           <div className="flex gap-2">
             <img src={calendarIcon}></img>
-            <span className="text-muted text-[10px] md:tex-sm">Jan 31 - Feb, 2025</span>
+            <span className="text-muted text-[10px] md:tex-sm">{startDateMonth} {startDateDay} - {endDateDay}, {endDateYear}</span>
           </div>
         </div>
 
         <div className="flex gap-4">
-          <Button className="text-white bg-active font-semibold md:w-full" onClick={() =>fetchBookingsByRoomingList(id)}>
+          <Button
+            className="text-white bg-active font-semibold md:w-full"
+            onClick={() => fetchBookingsByRoomingList(id)}
+          >
             View Bookings ({bookingsCount})
           </Button>
           <TooltipProvider>

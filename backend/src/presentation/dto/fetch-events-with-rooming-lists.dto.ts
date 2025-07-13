@@ -33,7 +33,7 @@ export class FetchRoomingListsQueryDto {
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  perPage: number = 10;
+  perPage: number = 3;
 
   @IsOptional()
   @IsEnum(Sorting)

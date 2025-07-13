@@ -1,5 +1,5 @@
 import calendarIcon from "../assets/calendar 2.png";
-import viewAggreementIcon from "../assets/view-aggrement-icon.png";
+import viewAgreementIcon from "../assets/view-agreement-icon.png";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 type Props = {
@@ -53,7 +53,7 @@ export const RoomingListCard = ({
                 View Bookings ({bookingsCount})
               </Button>
               <div className="flex justify-center  items-center border-2 border-active p-2 rounded-lg">
-                <img src={viewAggreementIcon} />
+                <img src={viewAgreementIcon} />
               </div>
             </div>
           </TooltipTrigger>

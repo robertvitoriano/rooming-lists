@@ -85,12 +85,16 @@ You can choose to run only PostgreSQL via Docker and the applications via Node.j
 1. Start the PostgreSQL container (inside `backend/`):
    ```bash
    docker compose up
+   
+2. Run the migrations(inside `backend/`):
+   ```bash
+   npm run migrate:run
    ```
-2. Start the backend service locally (still inside `backend/`):
+3. Start the backend service locally (still inside `backend/`):
    ```bash
    npm run start:dev
    ```
-3. Start the frontend service locally (inside `frontend/`):
+4. Start the frontend service locally (inside `frontend/`):
    ```bash
    npm run dev
    ```

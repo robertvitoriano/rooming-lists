@@ -5,7 +5,7 @@ export type RoomingListFilteringOptions = {
   status?;
   eventName?: string;
   rfpName?: string;
-  aggrementType?: IRoomingListAgreementType;
+  agreementType?: IRoomingListAgreementType;
 };
 export interface IRoomingListsRepository {
   findManyByEventId(

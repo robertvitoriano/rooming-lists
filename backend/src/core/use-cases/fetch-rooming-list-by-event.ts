@@ -9,7 +9,7 @@ interface FetchRoomingListsByEventRequest extends PaginationParams {
   eventId: string;
   status?: IRoomingListStatus;
   rfpName?: string;
-  aggrementType?: IRoomingListAgreementType;
+  agreementType?: IRoomingListAgreementType;
   eventName?: string;
 }
 interface FetchRoomingListsResponse {
@@ -29,7 +29,7 @@ export class FetchRoomingListsByEventUseCase {
       page,
       perPage,
       sort,
-      aggrementType,
+      agreementType,
       eventName,
       rfpName,
       status,
@@ -47,7 +47,7 @@ export class FetchRoomingListsByEventUseCase {
           sort,
         },
         {
-          aggrementType,
+          agreementType,
           eventName,
           rfpName,
           status,

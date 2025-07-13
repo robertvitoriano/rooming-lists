@@ -39,9 +39,9 @@ export class RoomingListsRepository implements IRoomingListsRepository {
       query.andWhere('roomingList.status = :status', { status: filters.status });
     }
 
-    if (filters?.aggrementType) {
-      query.andWhere('roomingList.agreementType = :aggrementType', {
-        aggrementType: filters.aggrementType,
+    if (filters?.agreementType) {
+      query.andWhere('roomingList.agreementType = :agreementType', {
+        agreementType: filters.agreementType,
       });
     }
 

@@ -31,14 +31,14 @@ export class EventsController {
   ): Promise<ControllerResponse<EventWithRoomingListResponseData[]>> {
     const queryDto = plainToInstance(FetchRoomingListsQueryDto, query);
 
-    const { eventName, status, rfpName, aggrementType, page, perPage, sort } =
+    const { eventName, status, rfpName, agreementType, page, perPage, sort } =
       queryDto;
 
     const { eventsWithRoomingLists, total } =
       await this.fetchEventsWithRoomingListsUseCase.execute({
         status: roomingListsStatusMap[status as string],
         rfpName,
-        aggrementType: aggrementType as IRoomingListAgreementType,
+        agreementType: agreementType as IRoomingListAgreementType,
         eventName,
         page,
         perPage,
@@ -97,13 +97,13 @@ export class EventsController {
   ): Promise<ControllerResponse<RoomingListResponseData[]>> {
     const queryDto = plainToInstance(FetchRoomingListsQueryDto, query);
 
-    const { status, rfpName, aggrementType, page, perPage, sort } =
+    const { status, rfpName, agreementType, page, perPage, sort } =
       queryDto;
     const { roomingLists, total } =
       await this.fetchRoomingListsByEventUseCase.execute({
         status: roomingListsStatusMap[status as string],
         rfpName,
-        aggrementType: aggrementType as IRoomingListAgreementType,
+        agreementType: agreementType as IRoomingListAgreementType,
         eventId,
         page: Number(page),
         perPage: Number(perPage),

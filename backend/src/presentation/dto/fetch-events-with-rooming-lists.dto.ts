@@ -17,7 +17,7 @@ export class FetchRoomingListsQueryDto {
 
   @IsOptional()
   @IsString()
-  aggrementType?: string;
+  agreementType?: string;
 
   @IsOptional()
   @Type(() => Number)

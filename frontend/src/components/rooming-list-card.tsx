@@ -1,3 +1,4 @@
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 import calendarIcon from "../assets/calendar 2.png";
 import viewAgreementIcon from "../assets/view-agreement-icon.png";
 import { Button } from "./ui/button";
@@ -46,21 +47,24 @@ export const RoomingListCard = ({
             <span className="text-muted text-[10px] md:tex-sm">Jan 31 - Feb, 2025</span>
           </div>
         </div>
-        <Tooltip>
-          <TooltipTrigger>
-            <div className="flex gap-4">
-              <Button className="text-white bg-active font-semibold md:w-full">
-                View Bookings ({bookingsCount})
-              </Button>
-              <div className="flex justify-center  items-center border-2 border-active p-2 rounded-lg">
-                <img src={viewAgreementIcon} />
-              </div>
-            </div>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Show Agreement as PDF</p>
-          </TooltipContent>
-        </Tooltip>
+
+        <div className="flex gap-4">
+          <Button className="text-white bg-active font-semibold md:w-full">
+            View Bookings ({bookingsCount})
+          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <div className="flex justify-center  items-center border-2 border-active p-2 rounded-lg">
+                  <img src={viewAgreementIcon} />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Show Agreement as PDF</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
       </div>
     </div>
   );

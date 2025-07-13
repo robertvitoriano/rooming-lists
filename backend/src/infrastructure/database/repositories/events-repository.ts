@@ -73,14 +73,14 @@ export class EventsRepository implements IEventsRepository {
         });
     }
 
-    if (filters?.aggrementType) {
-      baseQuery.andWhere('roomingList.status = :aggrementType', {
-        aggrementType: filters.aggrementType,
+    if (filters?.agreementType) {
+      baseQuery.andWhere('roomingList.status = :agreementType', {
+        agreementType: filters.agreementType,
       });
       countQuery
         .leftJoin('event.roomingLists', 'roomingList')
-        .andWhere('roomingList.agreement_type ILIKE :aggrementType', {
-          aggrementType: `%${filters.aggrementType}%`,
+        .andWhere('roomingList.agreement_type ILIKE :agreementType', {
+          agreementType: `%${filters.agreementType}%`,
         });
     }
 

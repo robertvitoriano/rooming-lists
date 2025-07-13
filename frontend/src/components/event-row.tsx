@@ -10,7 +10,7 @@ type Props = {
 };
 export const EventRow = ({ event, color }: Props) => {
   
-const lightColor = lightenColor(color, 0.25)
+const lightColor = lightenColor(color, 0.50)
 
   return (
     <div className="flex flex-col gap-4">

@@ -28,8 +28,11 @@ export const RoomingListRow = ({ event, color }: Props) => {
     (state) => state.cutOffDateSortByEventMap[event.id] || "DESC"
   );
   const lightColor = lightenColor(color, 0.5);
-
+  
   const { data, isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } = useInfiniteQuery({
+    initialPageParam: 1,
+    enabled,
+    refetchOnWindowFocus: false,
     queryKey: ["roomingLists", event.id, cutOffDateSort, filteredSearch, filteredStatus],
     queryFn: async ({ pageParam = 1 }) => {
       const response = await fetchRoomingListsByEvent({
@@ -53,14 +56,11 @@ export const RoomingListRow = ({ event, color }: Props) => {
         },
       };
     },
-    initialPageParam: 1,
     getNextPageParam: (lastPage) => {
       return lastPage.meta.pagination.currentPage < lastPage.meta.pagination.totalPages
         ? lastPage.meta.pagination.currentPage + 1
         : undefined;
     },
-    enabled,
-    refetchOnWindowFocus: false,
     initialData: () => {
       if (event.roomingLists.length > 0) {
         return {

@@ -5,10 +5,11 @@ import { PopOverWrapper } from "./pop-over-wrapper";
 import CutOffDateSort from "./cut-off-date-sort";
 import { RoomingList } from "@/api/fetchEvents";
 import { fetchRoomingListsByEvent } from "@/api/fetch-rooming-lists-event";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { SortOrder, useRoomingListsFilterStore } from "@/store/useRoomingListsFilterStore";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useEventsFilterStore } from "@/store/useEventsFilterStore";
+import { Button } from "./ui/button";
 
 type Props = {
   event: {
@@ -21,7 +22,6 @@ type Props = {
 
 export const RoomingListRow = ({ event, color }: Props) => {
   const [enabled, setEnabled] = useState(false);
-
   const { setCutOffDateSortForEvent } = useRoomingListsFilterStore();
   const { filteredSearch, filteredStatus } = useEventsFilterStore();
   const cutOffDateSort = useRoomingListsFilterStore(
@@ -29,24 +29,72 @@ export const RoomingListRow = ({ event, color }: Props) => {
   );
   const lightColor = lightenColor(color, 0.5);
 
-  const { data, isFetching } = useQuery({
-    queryKey: ["roomingLists", event.id, cutOffDateSort],
-    queryFn: () =>
-      fetchRoomingListsByEvent({
+  const { data, isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } = useInfiniteQuery({
+    queryKey: ["roomingLists", event.id, cutOffDateSort, filteredSearch, filteredStatus],
+    queryFn: async ({ pageParam = 1 }) => {
+      const response = await fetchRoomingListsByEvent({
         eventId: event.id,
         cutOffDateSort,
         search: filteredSearch,
         status: filteredStatus,
-      }),
+        page: pageParam,
+      });
+
+      return {
+        data: response.data,
+        message: response.message,
+        meta: {
+          ...response.meta,
+          pagination: {
+            currentPage: response.meta?.pagination?.currentPage ?? 1,
+            totalPages: response.meta?.pagination?.totalPages ?? 1,
+            ...response.meta?.pagination,
+          },
+        },
+      };
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      return lastPage.meta.pagination.currentPage < lastPage.meta.pagination.totalPages
+        ? lastPage.meta.pagination.currentPage + 1
+        : undefined;
+    },
     enabled,
     refetchOnWindowFocus: false,
+    initialData: () => {
+      if (event.roomingLists.length > 0) {
+        return {
+          pages: [
+            {
+              data: event.roomingLists,
+              meta: {
+                pagination: {
+                  currentPage: 1,
+                  totalPages: 1,
+                },
+              },
+              message: "Initial data",
+            },
+          ],
+          pageParams: [1],
+        };
+      }
+      return undefined;
+    },
   });
 
   const handleCutOffDateSortSave = (close: () => void) => {
     close();
     setEnabled(true);
   };
-  const roomingLists = data?.data ?? event.roomingLists;
+
+  const roomingLists = data?.pages.flatMap((page) => page.data) ?? event.roomingLists;
+
+  const loadMore = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -77,13 +125,28 @@ export const RoomingListRow = ({ event, color }: Props) => {
         </div>
       </PopOverWrapper>
 
-      <div className="flex gap-4 overflow-x-auto whitespace-nowrap pb-2">
-        {roomingLists.map((roomingList) => (
-          <div key={roomingList.id} className="flex-shrink-0">
-            <RoomingListCard roomingList={roomingList} />
-          </div>
-        ))}
-        {isFetching && <div className="text-sm text-muted">Loading...</div>}
+      <div className="flex flex-col gap-4">
+        <div className="flex gap-4 overflow-x-auto whitespace-nowrap pb-2">
+          {roomingLists.map((roomingList) => (
+            <div key={roomingList.id} className="flex-shrink-0">
+              <RoomingListCard roomingList={roomingList} />
+            </div>
+          ))}
+          {(isFetching || isFetchingNextPage) && (
+            <div className="text-sm text-muted">Loading...</div>
+          )}
+        </div>
+
+        {hasNextPage && (
+          <Button
+            onClick={loadMore}
+            disabled={isFetchingNextPage}
+            style={{ backgroundColor: lightColor, color }}
+            className="self-center"
+          >
+            {isFetchingNextPage ? "Loading more..." : "Load More"}
+          </Button>
+        )}
       </div>
     </div>
   );

@@ -10,7 +10,10 @@ export class AuthController {
 
   @Post('/')
   async seed() {
-    await this.authService.handle(env.JWT_PAYLOAD)
     
+    const { token } = await this.authService.handle(env.JWT_PAYLOAD)
+    return {
+      token
+    }
   }
 }

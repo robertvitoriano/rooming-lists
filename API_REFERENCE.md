@@ -1,6 +1,30 @@
 # 📘 API Controller Documentation
 
-This document provides an initial overview of the available  endpoints in the Rooming Lists API.
+This document provides an overview of the available  endpoints in the Rooming Lists API.
+
+
+
+# AuthController
+
+**Base Route:** `/auth`
+
+---
+
+## POST `/`
+
+### 🔐 Purpose
+
+Issues a JWT bearer token used to authenticate requests to other protected routes within the application.
+
+---
+
+### 📝 How to Use
+
+Send a `POST` request to the `/auth` endpoint.  
+On success, you will receive a JSON response containing a JWT token.
+
+To authorize requests to protected routes, include this token in the `Authorization` header with the `Bearer` prefix:
+
 
 ---
 
@@ -24,6 +48,8 @@ Seeds the database with test data.
 
 * If `truncate` is `true` (default), the database is first cleared.
 * Then, data is seeded into the system.
+
+
 
 ---
 

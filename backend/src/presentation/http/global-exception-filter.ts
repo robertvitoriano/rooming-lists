@@ -5,6 +5,7 @@ import {
   HttpStatus,
   Logger,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ErrorCodes } from 'src/core/errors/error-codes';
@@ -18,10 +19,12 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    
-    
-    this.logger.error(exception?.message ?? "Unhandled exception", exception as any);
-    
+
+    this.logger.error(
+      exception?.message ?? 'Unhandled exception',
+      exception as any,
+    );
+
     if (exception instanceof EventNotFoundError) {
       response.status(HttpStatus.NOT_FOUND).json({
         statusCode: HttpStatus.NOT_FOUND,
@@ -29,6 +32,15 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         message: exception.message,
       });
       throw new NotFoundException(exception.message);
+    }
+
+    if (exception instanceof UnauthorizedException) {
+      response.status(HttpStatus.UNAUTHORIZED).json({
+        statusCode: HttpStatus.UNAUTHORIZED,
+        code: ErrorCodes.UNAUTHORIZED,
+        message: exception.message,
+      });
+      throw new UnauthorizedException(exception.message);
     }
 
     if (exception instanceof RoomingListNotFoundError) {
@@ -39,7 +51,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       });
       throw new NotFoundException(exception.message);
     }
-    
+
     response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
       code: ErrorCodes.INTERNAL_ERROR,

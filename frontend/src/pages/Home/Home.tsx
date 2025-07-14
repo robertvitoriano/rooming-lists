@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import searcIcon from "../../assets/search-icon.png";
 import MixerIcon from "../../assets/mixer-icon.svg?react";
-import { useEffect, useState } from "react";
+import { useState, useMemo } from "react";
 import { PopOverWrapper } from "@/components/pop-over-wrapper";
 import RoomingListsFilter from "@/components/rooming-lists-filter";
 import { generateRandomColors } from "@/lib/utils";
@@ -9,42 +9,37 @@ import { RoomingListRow } from "@/components/rooming-list-row";
 import { fetchEvents } from "@/api/fetchEvents";
 import { Button } from "@/components/ui/button";
 import { insertBookingsAndRoomingLists } from "@/api/insert-bookings-and-rooming-lists";
+import { useQuery } from "@tanstack/react-query";
 
 export function Home() {
-  const [events, setEvents] = useState([]);
-  const [colors, setColors] = useState<string[]>([]);
   const [filteredStatus, setFilteredStatus] = useState<string[]>([]);
   const [filteredSearch, setFilteredSearch] = useState<string>("");
-  useEffect(() => {
-    loadData();
-  }, [filteredSearch, filteredStatus]);
 
-  const loadData = async () => {
-    const eventsResponse = await fetchEvents(
-      {
-        page: 1,
-      },
-      {
-        search: filteredSearch,
-        status: filteredStatus,
-        sort:'DESC'
-      }
-    );
+  const {
+    data: eventsData,
+    refetch,
+    isLoading,
+    isFetching,
+  } = useQuery({
+    queryKey: ["events", filteredSearch, filteredStatus],
+    queryFn: () =>
+      fetchEvents(
+        { page: 1 },
+        { search: filteredSearch, status: filteredStatus, sort: "DESC" }
+      ),
+  });
 
-    if (eventsResponse?.data) {
-      setEvents(eventsResponse.data);
-      setColors(generateRandomColors(eventsResponse.data.length));
-    }
-  };
+  const events = eventsData?.data || [];
+  const colors = useMemo(() => generateRandomColors(events.length), [events.length]);
 
   const handleStatusFilterSave = (closeFilter: () => void) => {
     closeFilter();
   };
-  const handleDataSeeding = async() =>{
-    await insertBookingsAndRoomingLists()
-    await loadData()
-    
-  }
+
+  const handleDataSeeding = async () => {
+    await insertBookingsAndRoomingLists();
+    await refetch();
+  };
 
   return (
     <div className="flex flex-col gap-8">
@@ -69,7 +64,7 @@ export function Home() {
               <RoomingListsFilter
                 checkedColor={colors[0]}
                 onSave={() => handleStatusFilterSave(close)}
-                setFilteredStatus = {setFilteredStatus}
+                setFilteredStatus={setFilteredStatus}
                 selectedStatus={filteredStatus}
               />
             )}
@@ -79,12 +74,18 @@ export function Home() {
               <MixerIcon style={{ color: colors[0], width: "18px", height: "18px" }} />
             </div>
           </PopOverWrapper>
-          <Button onClick={handleDataSeeding}>Insert Bookings and Rooming Lists</Button>
+          <Button onClick={handleDataSeeding}>
+            {isFetching ? "Loading..." : "Insert Bookings and Rooming Lists"}
+          </Button>
         </div>
       </div>
-      {events.map((event, index) => (
-        <RoomingListRow key={event.id} event={event} color={colors[index]} />
-      ))}
+      {isLoading ? (
+        <span>Loading events...</span>
+      ) : (
+        events.map((event, index) => (
+          <RoomingListRow key={event.id} event={event} color={colors[index]} />
+        ))
+      )}
     </div>
   );
 }

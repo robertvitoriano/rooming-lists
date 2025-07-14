@@ -11,14 +11,14 @@ const items = [
 type Props = {
   checkedColor: string;
   onSave: () => void;
-  setCutOffDateSort: (sort: string) => void;
+  setCutOffDateSortForEvent: (sort: string) => void;
   cuttOffSortSelectedValue: string;
 };
 
 export default function CutOffDateSort({
   checkedColor,
   onSave,
-  setCutOffDateSort,
+  setCutOffDateSortForEvent,
   cuttOffSortSelectedValue,
 }: Props) {
   const [selected, setSelected] = useState(cuttOffSortSelectedValue);
@@ -28,7 +28,7 @@ export default function CutOffDateSort({
   }, [cuttOffSortSelectedValue]);
 
   const handleSubmit = () => {
-    setCutOffDateSort(selected);
+    setCutOffDateSortForEvent(selected);
     onSave();
   };
 

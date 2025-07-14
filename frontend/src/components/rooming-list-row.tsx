@@ -4,9 +4,11 @@ import { CaretSortIcon } from "@radix-ui/react-icons";
 import { PopOverWrapper } from "./pop-over-wrapper";
 import CutOffDateSort from "./cut-off-date-sort";
 import { RoomingList } from "@/api/fetchEvents";
-import { useState } from "react";
 import { fetchRoomingListsByEvent } from "@/api/fetch-rooming-lists-event";
 import { useQuery } from "@tanstack/react-query";
+import { SortOrder, useRoomingListsFilterStore } from "@/store/useRoomingListsFilterStore";
+import { useState } from "react";
+import { useEventsFilterStore } from "@/store/useEventsFilterStore";
 
 type Props = {
   event: {
@@ -18,28 +20,32 @@ type Props = {
 };
 
 export const RoomingListRow = ({ event, color }: Props) => {
-  const [cutOffDateSort, setCutOffDateSort] = useState<string>("DESC");
-  const [enabled, setEnabled] = useState(false); 
-  
+  const [enabled, setEnabled] = useState(false);
+
+  const { setCutOffDateSortForEvent } = useRoomingListsFilterStore();
+  const { filteredSearch, filteredStatus } = useEventsFilterStore();
+  const cutOffDateSort = useRoomingListsFilterStore(
+    (state) => state.cutOffDateSortByEventMap[event.id] || "DESC"
+  );
   const lightColor = lightenColor(color, 0.5);
 
-  const {
-    data,
-    refetch,
-    isFetching,
-  } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ["roomingLists", event.id, cutOffDateSort],
-    queryFn: () => fetchRoomingListsByEvent(event.id, cutOffDateSort),
-    enabled, 
+    queryFn: () =>
+      fetchRoomingListsByEvent({
+        eventId: event.id,
+        cutOffDateSort,
+        search: filteredSearch,
+        status: filteredStatus,
+      }),
+    enabled,
     refetchOnWindowFocus: false,
   });
 
-  const handleCutOffDateSortSave = async (closeCutOffDateSortSelecion: () => void) => {
-    closeCutOffDateSortSelecion();
+  const handleCutOffDateSortSave = (close: () => void) => {
+    close();
     setEnabled(true);
-    await refetch(); 
   };
-
   const roomingLists = data?.data ?? event.roomingLists;
 
   return (
@@ -59,7 +65,9 @@ export const RoomingListRow = ({ event, color }: Props) => {
           <CutOffDateSort
             checkedColor={color}
             onSave={() => handleCutOffDateSortSave(close)}
-            setCutOffDateSort={setCutOffDateSort}
+            setCutOffDateSortForEvent={(sort) =>
+              setCutOffDateSortForEvent(event.id, sort as SortOrder)
+            }
             cuttOffSortSelectedValue={cutOffDateSort}
           />
         )}

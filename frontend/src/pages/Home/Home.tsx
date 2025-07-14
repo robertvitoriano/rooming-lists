@@ -1,19 +1,20 @@
-import { Input } from "@/components/ui/input";
-import searcIcon from "../../assets/search-icon.png";
-import MixerIcon from "../../assets/mixer-icon.svg?react";
-import { useState, useMemo } from "react";
-import { PopOverWrapper } from "@/components/pop-over-wrapper";
-import RoomingListsFilter from "@/components/rooming-lists-filter";
-import { generateRandomColors } from "@/lib/utils";
-import { RoomingListRow } from "@/components/rooming-list-row";
 import { fetchEvents } from "@/api/fetchEvents";
-import { Button } from "@/components/ui/button";
 import { insertBookingsAndRoomingLists } from "@/api/insert-bookings-and-rooming-lists";
+import { PopOverWrapper } from "@/components/pop-over-wrapper";
+import { RoomingListRow } from "@/components/rooming-list-row";
+import RoomingListsFilter from "@/components/rooming-lists-filter";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { generateRandomColors } from "@/lib/utils";
+import { useRoomingListsFilterStore } from "@/store/useRoomingListFilterStore";
 import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
+import searchIcon from "./../../assets/search-icon.png";
+import MixerIcon from "./../../assets/mixer-3-sliders.svg?react";
 
 export function Home() {
-  const [filteredStatus, setFilteredStatus] = useState<string[]>([]);
-  const [filteredSearch, setFilteredSearch] = useState<string>("");
+  const { filteredSearch, setFilteredSearch, filteredStatus, setFilteredStatus } =
+    useRoomingListsFilterStore();
 
   const {
     data: eventsData,
@@ -23,10 +24,7 @@ export function Home() {
   } = useQuery({
     queryKey: ["events", filteredSearch, filteredStatus],
     queryFn: () =>
-      fetchEvents(
-        { page: 1 },
-        { search: filteredSearch, status: filteredStatus, sort: "DESC" }
-      ),
+      fetchEvents({ page: 1 }, { search: filteredSearch, status: filteredStatus, sort: "DESC" }),
   });
 
   const events = eventsData?.data || [];
@@ -49,14 +47,12 @@ export function Home() {
         </div>
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex relative border b-border bg-white rounded-xl h-fit">
-            <img src={searcIcon} />
+            <img src={searchIcon} />
             <Input
               placeholder="Search"
-              className="border-none bg-white  rounded-xl"
+              className="border-none bg-white rounded-xl"
               value={filteredSearch}
-              onChange={(e) => {
-                setFilteredSearch(e.target.value);
-              }}
+              onChange={(e) => setFilteredSearch(e.target.value)}
             />
           </div>
           <PopOverWrapper
@@ -79,6 +75,7 @@ export function Home() {
           </Button>
         </div>
       </div>
+
       {isLoading ? (
         <span>Loading events...</span>
       ) : (

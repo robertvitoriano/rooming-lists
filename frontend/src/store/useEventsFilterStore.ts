@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 
-type RoomingListFilterStore = {
+type EventsFilterStore = {
   filteredSearch: string;
   filteredStatus: string[];
   setFilteredSearch: (value: string) => void;
   setFilteredStatus: (status: string[]) => void;
 };
 
-export const useRoomingListsFilterStore = create<RoomingListFilterStore>((set) => ({
+export const useEventsFilterStore = create<EventsFilterStore>((set) => ({
   filteredSearch: '',
   filteredStatus: [],
   setFilteredSearch: (value) => set({ filteredSearch: value }),

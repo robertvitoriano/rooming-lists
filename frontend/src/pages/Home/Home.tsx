@@ -6,15 +6,15 @@ import RoomingListsFilter from "@/components/rooming-lists-filter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { generateRandomColors } from "@/lib/utils";
-import { useRoomingListsFilterStore } from "@/store/useRoomingListFilterStore";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import searchIcon from "./../../assets/search-icon.png";
 import MixerIcon from "./../../assets/mixer-3-sliders.svg?react";
+import { useEventsFilterStore } from "@/store/useEventsFilterStore";
 
 export function Home() {
   const { filteredSearch, setFilteredSearch, filteredStatus, setFilteredStatus } =
-    useRoomingListsFilterStore();
+    useEventsFilterStore();
 
   const {
     data: eventsData,

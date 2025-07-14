@@ -6,27 +6,25 @@ import RoomingListsFilter from "@/components/rooming-lists-filter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { generateRandomColors } from "@/lib/utils";
+import { useEventsFilterStore } from "@/store/useEventsFilterStore";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import searchIcon from "./../../assets/search-icon.png";
 import MixerIcon from "./../../assets/mixer-3-sliders.svg?react";
-import { useEventsFilterStore } from "@/store/useEventsFilterStore";
-
+import { useDebounceValue } from "usehooks-ts";
 export function Home() {
-  const { filteredSearch, setFilteredSearch, filteredStatus, setFilteredStatus } =
-    useEventsFilterStore();
-
+  const { setFilteredSearch, filteredStatus, setFilteredStatus } = useEventsFilterStore();
+  const [debouncedSearch, setDebouncedSearch] = useDebounceValue("", 200);
   const {
     data: eventsData,
     refetch,
     isLoading,
     isFetching,
   } = useQuery({
-    queryKey: ["events", filteredSearch, filteredStatus],
+    queryKey: ["events", debouncedSearch, filteredStatus],
     queryFn: () =>
-      fetchEvents({ page: 1 }, { search: filteredSearch, status: filteredStatus, sort: "DESC" }),
+      fetchEvents({ page: 1 }, { search: debouncedSearch, status: filteredStatus, sort: "DESC" }),
   });
-
   const events = eventsData?.data || [];
   const colors = useMemo(() => generateRandomColors(events.length), [events.length]);
 
@@ -51,8 +49,11 @@ export function Home() {
             <Input
               placeholder="Search"
               className="border-none bg-white rounded-xl"
-              value={filteredSearch}
-              onChange={(e) => setFilteredSearch(e.target.value)}
+              value={debouncedSearch}
+              onChange={(e) => {
+                setDebouncedSearch(e.target.value);
+                setFilteredSearch(e.target.value);
+              }}
             />
           </div>
           <PopOverWrapper
@@ -80,7 +81,7 @@ export function Home() {
         <span>Loading events...</span>
       ) : (
         events.map((event, index) => (
-          <RoomingListRow key={event.id} event={event} color={colors[index]} />
+          <RoomingListRow key={event.id} event={event} color={colors[index]}/>
         ))
       )}
     </div>

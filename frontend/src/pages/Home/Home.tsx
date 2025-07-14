@@ -14,7 +14,7 @@ import MixerIcon from "./../../assets/mixer-3-sliders.svg?react";
 import { useDebounceValue } from "usehooks-ts";
 export function Home() {
   const { setFilteredSearch, filteredStatus, setFilteredStatus } = useEventsFilterStore();
-  const [debouncedSearch, setDebouncedSearch] = useDebounceValue("", 200);
+  const [debouncedSearch, setDebouncedSearch] = useDebounceValue("", 100);
   const {
     data: eventsData,
     refetch,

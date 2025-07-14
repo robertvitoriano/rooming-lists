@@ -43,7 +43,6 @@ export class FetchEventsWithRoomingListsUseCase {
           search,
         },
       );
-      writeFileSync('eventsWithRoomingLists.json', JSON.stringify(eventsWithRoomingLists))
 
     const events = eventsWithRoomingLists.map(
       ({ id, name, roomingListsWithBooking }) => {

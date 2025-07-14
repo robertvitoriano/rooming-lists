@@ -120,7 +120,7 @@ export const RoomingListRow = ({ event, color }: Props) => {
           />
         )}
       >
-        <div className="bg-white p-2 w-fit h-fit rounded-xl">
+        <div className="bg-white p-2 w-fit h-fit rounded-xl border-2 border-border">
           <CaretSortIcon className="rotate-90 w-6 h-6" style={{ color }} />
         </div>
       </PopOverWrapper>

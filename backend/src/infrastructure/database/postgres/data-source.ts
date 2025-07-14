@@ -4,7 +4,7 @@ import { EventModel } from '../models/event.model';
 import { RoomingListModel } from '../models/rooming-list.model';
 import { RoomingListBookingModel } from '../models/rooming-list-bookings.model';
 import { env } from 'src/config/env';
-console.log({currentEnv:env.POSTGRES_HOST})
+
 export const AppDataSource = new DataSource({
   type: 'postgres',
   host: env.POSTGRES_HOST || 'postgres',

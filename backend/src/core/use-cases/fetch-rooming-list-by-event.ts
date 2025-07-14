@@ -11,6 +11,7 @@ interface FetchRoomingListsByEventRequest extends PaginationParams {
   rfpName?: string;
   agreementType?: IRoomingListAgreementType;
   eventName?: string;
+  search:string
 }
 interface FetchRoomingListsResponse {
   roomingLists: RoomingList[];
@@ -33,6 +34,7 @@ export class FetchRoomingListsByEventUseCase {
       eventName,
       rfpName,
       status,
+      search
     } = params;
     const event = await this.eventsRepository.findById(eventId);
 
@@ -51,6 +53,7 @@ export class FetchRoomingListsByEventUseCase {
           eventName,
           rfpName,
           status,
+          search
         },
       );
     const roomingLists = roomingListsWithBookings.map(

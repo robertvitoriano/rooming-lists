@@ -89,44 +89,15 @@ export class EventsRepository implements IEventsRepository {
       baseQuery.andWhere('roomingList.status IN (:...status)', {
         status,
       });
+      if(!filters.search) countQuery.leftJoin('event.roomingLists', 'roomingList')
 
       countQuery
-        .leftJoin('event.roomingLists', 'roomingList')
         .andWhere('roomingList.status IN (:...status)', {
           status,
         });
     }
 
-    if (filters?.eventName) {
-      baseQuery.andWhere('event.name ILIKE :eventName', {
-        eventName: `%${filters.eventName}%`,
-      });
-      countQuery.andWhere('event.name ILIKE :eventName', {
-        eventName: `%${filters.eventName}%`,
-      });
-    }
 
-    if (filters?.agreementType) {
-      baseQuery.andWhere('roomingList.status = :agreementType', {
-        agreementType: filters.agreementType,
-      });
-      countQuery
-        .leftJoin('event.roomingLists', 'roomingList')
-        .andWhere('roomingList.agreement_type ILIKE :agreementType', {
-          agreementType: `%${filters.agreementType}%`,
-        });
-    }
-
-    if (filters?.rfpName) {
-      baseQuery.andWhere('roomingList.rfp_name ILIKE :rfpName', {
-        rfpName: `%${filters.rfpName}%`,
-      });
-      countQuery
-        .leftJoin('event.roomingLists', 'roomingList')
-        .andWhere('roomingList.rfp_name ILIKE :rfpName', {
-          rfpName: `%${filters.rfpName}%`,
-        });
-    }
 
     baseQuery.skip(skip).take(perPage).orderBy('event.createdAt', sort);
 

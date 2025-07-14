@@ -37,9 +37,11 @@ export class RoomingListsRepository implements IRoomingListsRepository {
         'roomingListBooking',
       )
       .leftJoinAndSelect('roomingListBooking.booking', 'booking')
+      .leftJoinAndSelect('roomingList.event', 'event')
       .where('roomingList.eventId = :eventId', { eventId });
-
+      
     if (filters?.search) {
+
       query
         .andWhere('roomingList.rfp_name ILIKE :search', {
           search: `%${filters.search}%`,
@@ -49,7 +51,7 @@ export class RoomingListsRepository implements IRoomingListsRepository {
         })
         .orWhere('event.name ILIKE :search', {
           search: `%${filters.search}%`,
-        });
+        })
     }
 
     const status = filters?.status;
@@ -57,24 +59,6 @@ export class RoomingListsRepository implements IRoomingListsRepository {
     if (status && status.length > 0) {
       query.andWhere('roomingList.status IN (:...status)', {
         status,
-      });
-
-      query
-        .leftJoin('event.roomingLists', 'roomingList')
-        .andWhere('roomingList.status IN (:...status)', {
-          status,
-        });
-    }
-
-    if (filters?.rfpName) {
-      query.andWhere('roomingList.rfpName ILIKE :rfpName', {
-        rfpName: `%${filters.rfpName}%`,
-      });
-    }
-
-    if (filters?.agreementType) {
-      query.andWhere('roomingList.agreementType = :agreementType', {
-        agreementType: filters.agreementType,
       });
     }
 

@@ -112,7 +112,7 @@ export class EventsController {
   ): Promise<ControllerResponse<RoomingListResponseData[]>> {
     const queryDto = plainToInstance(FetchRoomingListsQueryDto, query);
 
-    const { status, rfpName, agreementType, page, perPage, sort } = queryDto;
+    const { status, rfpName, agreementType, page, perPage, sort, search } = queryDto;
     const { roomingLists, total } =
       await this.fetchRoomingListsByEventUseCase.execute({
         status: roomingListsStatusMap[status as string],
@@ -122,6 +122,7 @@ export class EventsController {
         page: Number(page),
         perPage: Number(perPage),
         sort: sort.toUpperCase() as Sorting,
+        search: String(search)
       });
 
     return {

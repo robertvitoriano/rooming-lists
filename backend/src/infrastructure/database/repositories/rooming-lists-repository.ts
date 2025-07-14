@@ -109,6 +109,9 @@ export class RoomingListsRepository implements IRoomingListsRepository {
               status,
             },
             { id, createdAt, updatedAt },
+            {
+              bookingsCount: roomingListBookings.length
+            }
           ),
           bookings: roomingListBookings.map(
             ({
@@ -134,6 +137,7 @@ export class RoomingListsRepository implements IRoomingListsRepository {
                   updatedAt,
                   id,
                 },
+                
               ),
           ),
         }),

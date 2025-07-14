@@ -44,7 +44,8 @@ Ensure that both the frontend and backend projects have a `.env` file in their r
 
 ```env
 VITE_API_URL="http://localhost:3000"
-VITE_API_TOKEN="your-development-jwt-token"
+VITE_API_TOKEN="eyJhbGciOiJIUzI1NiJ9.YzYzMjUzYmQtMDZjNy00MjA2LWI5YTEtZTM3NGYwNTk0N2Vk.e0eryyEHIAf2tTpPOMvM7oz7ooDVBzeu4U6vXEQVLUg"
+
 ```
 #### 🛠️ Backend `.env` example:
 

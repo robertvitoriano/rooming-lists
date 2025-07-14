@@ -55,8 +55,8 @@ POSTGRES_PASSWORD="mypassword"
 POSTGRES_DB="mydatabase"
 POSTGRES_HOST="localhost"
 POSTGRES_PORT=5432
-JWT_SECRET="your-jwt-secret"
-JWT_PAYLOAD="your-jwt-payload"
+JWT_SECRET='78d4ee03-db4b-4945-93ca-f779b0208952'
+JWT_PAYLOAD='c63253bd-06c7-4206-b9a1-e374f05947ed'
 PORT=3000
 ```
 > ⚠️ Update these values to match your local PostgreSQL setup.

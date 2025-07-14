@@ -42,7 +42,6 @@ export class EventsRepository implements IEventsRepository {
   }> {
     const { page, perPage, sort } = paginationParams;
     const skip = (page - 1) * perPage;
-    const ROOMING_LISTS_COUNT = 3;
 
     const baseQuery = this.dataSource
       .getRepository(EventModel)
@@ -112,7 +111,6 @@ export class EventsRepository implements IEventsRepository {
         name,
         roomingListsWithBooking: roomingLists
           .sort((a, b) => b.cutOffDate.getTime() - a.cutOffDate.getTime())
-          .slice(0, ROOMING_LISTS_COUNT)
           .map(
             ({
               agreementType,

@@ -28,7 +28,7 @@ export const RoomingListRow = ({ event, color }: Props) => {
     (state) => state.cutOffDateSortByEventMap[event.id] || "DESC"
   );
   const lightColor = lightenColor(color, 0.5);
-  
+
   const { data, isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } = useInfiniteQuery({
     initialPageParam: 1,
     enabled,

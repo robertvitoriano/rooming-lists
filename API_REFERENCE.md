@@ -1,4 +1,4 @@
-# 📘 API Controller Documentation
+# 📘 API Reference Documentation
 
 This document provides an overview of the available  endpoints in the Rooming Lists API.
 
